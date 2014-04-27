@@ -103,8 +103,8 @@ public class Course {
 	public String getProfessor() {
 		return professor;
 	}
-	public void getProfessor(Professor professor) {
-		this.professor = professor.getEmail();
+	public void setProfessor(String professor) {
+		this.professor = professor;
 	}	
 	
 	public ArrayList<Integer> getDays() {

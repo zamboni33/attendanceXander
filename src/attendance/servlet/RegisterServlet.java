@@ -54,6 +54,21 @@ public class RegisterServlet extends HttpServlet {
 		ObjectifyService.register(Professor.class);
 		ObjectifyService.register(Student.class);
 		ObjectifyService.register(Attendance.class);
+		ObjectifyService.register(Course.class);
+		
+		// Update Course Entity
+		
+		Query<Course> courses = ofy().load().type(Course.class)
+				.filter("classUnique", req.getParameter("courseDropDown") );
+		Course thisCourse = null;
+		
+		for(Course course : courses ) {
+			// Grab professor out of query
+			thisCourse = course;
+		}
+		
+		thisCourse.setProfessor(Professor.normalize(user.getEmail()));
+		ofy().save().entities(thisCourse).now();
 		
 		// Update Professor Entity
 		Query<Professor> professors = ofy().load().type(Professor.class)
@@ -94,7 +109,7 @@ public class RegisterServlet extends HttpServlet {
 				ofy().save().entities(existingStudent).now();
 				
 				Attendance newAttendance = new Attendance(attendanceKey);
-				newAttendance.assignAbsent("2014-04-23");
+//				newAttendance.assignAbsent("2014-04-23");
 				ofy().save().entities(newAttendance).now();
 			}
 			else {
