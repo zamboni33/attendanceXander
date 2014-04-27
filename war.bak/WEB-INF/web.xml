@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee">
+         
+         
+<!-- Debug Init -->
+    <servlet>
+        <servlet-name>Init</servlet-name>
+        <servlet-class>attendance.servlet.InitServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Init</servlet-name>
+        <url-pattern>/Init</url-pattern>
+    </servlet-mapping>
+    
+<!-- End Debug Init -->  
+    
+<!-- Cron Jobs -->
+    <servlet>
+        <servlet-name>StartAttendance</servlet-name>
+        <servlet-class>attendance.servlet.StartAttendanceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StartAttendance</servlet-name>
+        <url-pattern>/StartAttendance</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>StopAttendance</servlet-name>
+        <servlet-class>attendance.servlet.StopAttendanceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StopAttendance</servlet-name>
+        <url-pattern>/StopAttendance</url-pattern>
+    </servlet-mapping>
+    
+<!--<security-constraint>-->
+<!--    <web-resource-collection>-->
+<!--        <web-resource-name>cron</web-resource-name>-->
+<!--        <url-pattern>/cron/*</url-pattern>-->
+<!--    </web-resource-collection>-->
+<!--    <auth-constraint>-->
+<!--        <role-name>admin</role-name>-->
+<!--    </auth-constraint>-->
+<!--</security-constraint>-->  
+    
+<!-- End Cron Job -->   
+
+<!-- Servlets -->
+
+<!-- Sign In -->
+    <servlet>
+        <servlet-name>SignIn</servlet-name>
+        <servlet-class>attendance.servlet.SignInServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SignIn</servlet-name>
+        <url-pattern>/SignIn</url-pattern>
+    </servlet-mapping>
+
+<!-- Sign Out -->    
+    <servlet>
+        <servlet-name>SignOut</servlet-name>
+        <servlet-class>attendance.servlet.SignOutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SignOut</servlet-name>
+        <url-pattern>/SignOut</url-pattern>
+    </servlet-mapping>
+    
+<!-- Register -->
+    <servlet>
+        <servlet-name>Register</servlet-name>
+        <servlet-class>attendance.servlet.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/Register</url-pattern>
+    </servlet-mapping>
+    
+<!-- Save Classroom -->
+    <servlet>
+        <servlet-name>SaveClassroom</servlet-name>
+        <servlet-class>attendance.servlet.SaveClassroomServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SaveClassroom</servlet-name>
+        <url-pattern>/SaveClassroom</url-pattern>
+    </servlet-mapping>
+    
+<!-- Locate -->
+    <servlet>
+        <servlet-name>Locate</servlet-name>
+        <servlet-class>attendance.servlet.LocateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Locate</servlet-name>
+        <url-pattern>/Locate</url-pattern>
+    </servlet-mapping>    
+    
+<!-- End Servlets -->
+  
+<!-- Filter -->
+  	<filter>
+		<filter-name>ObjectifyFilter</filter-name>
+		<filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ObjectifyFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+<!-- End Filter -->  
+  
+  
+<!-- Default page to serve -->
+ 	<welcome-file-list>
+    	<welcome-file>AttendanceXander.jsp</welcome-file>
+  	</welcome-file-list>
+
+
+</web-app>

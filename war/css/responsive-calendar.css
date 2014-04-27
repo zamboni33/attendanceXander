@@ -1,0 +1,91 @@
+.responsive-calendar {
+	background-color: white;
+}
+
+.responsive-calendar .controls {
+  text-align: center;
+}
+.responsive-calendar .controls a {
+  cursor: pointer;
+}
+.responsive-calendar .controls h4 {
+  display: inline;
+}
+.responsive-calendar .day-headers,
+.responsive-calendar .days {
+  font-size: 0;
+}
+.responsive-calendar .day {
+  display: inline-block;
+  position: relative;
+  font-size: 14px;
+  width: 14.285714285714286%;
+  text-align: center;
+}
+.responsive-calendar .day a {
+  color: #000000;
+  display: block;
+  cursor: pointer;
+  padding: 20% 0 20% 0;
+}
+.responsive-calendar .day a:hover {
+  background-color: #eee;
+  text-decoration: none;
+}
+.responsive-calendar .day.header {
+  border-bottom: 1px gray solid;
+}
+.responsive-calendar .day.absent a {
+  background-color: #b21a2c;
+  color: #ffffff;
+}
+.responsive-calendar .day.absent a:hover {
+  background-color: #36a0e2;
+}
+.responsive-calendar .day.absent .not-current {
+  background-color: #8fcaef;
+  color: #ffffff;
+}
+.responsive-calendar .day.absent .not-current:hover {
+  background-color: #bcdff5;
+}
+
+.responsive-calendar .day.present a {
+  background-color: #66CD00;
+  color: #ffffff;
+}
+.responsive-calendar .day.present a:hover {
+  background-color: #36a0e2;
+}
+.responsive-calendar .day.present .not-current {
+  background-color: #8fcaef;
+  color: #ffffff;
+}
+.responsive-calendar .day.present .not-current:hover {
+  background-color: #bcdff5;
+}
+
+.responsive-calendar .day.today a {
+  background-color: #3333FF;
+  color: #ffffff;
+}
+.responsive-calendar .day.today a:hover {
+  background-color: #36a0e2;
+}
+.responsive-calendar .day.today .not-current {
+  background-color: #8fcaef;
+  color: #ffffff;
+}
+.responsive-calendar .day.today .not-current:hover {
+  background-color: #bcdff5;
+}
+
+.responsive-calendar .day.not-current a {
+  color: #ddd;
+}
+.responsive-calendar .day .badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  z-index: 1;
+}

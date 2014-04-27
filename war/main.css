@@ -1,0 +1,107 @@
+
+head {
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+}
+
+.menu {
+	background-color:#FFD700;
+	position: fixed;
+	right: 0;
+	height: 100%;
+	width: 30%;
+	float: right;
+}
+
+.header {
+	margin-right: 30%;    
+    height: 5%;
+    background-color: beige;
+    text-align: center;
+}
+
+.main-wrap {
+/* 	margin-top: 5%;	 */
+	margin-right: 30%;
+	margin-bottom: 5%;
+    position: absolute;
+    height: 95%;
+    background-color: silver;
+    overflow: auto;
+}
+
+.container {
+    display: table;
+    height: 100%;
+}
+
+.content {
+	margin-right: 30%;
+    border: 1% solid blue;
+    display: table-cell;
+    height: 100%;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.footer {
+    height: 5%;
+    width: 100%;
+    background-color: lightblue;
+    position: fixed;
+    text-align: center;
+    bottom: 0;
+}
+
+
+
+input {
+	rows: 1;
+	cols: 60;
+}
+
+
+
+/* Map Stuff */
+
+/* .contextmenu{ */
+/*     visibility:hidden; */
+/*     background:#ffffff; */
+/*     border:1px solid #8888FF; */
+/*     z-index: 10;   */
+/*     position: relative; */
+/*     width: 140px; */
+/* } */
+/* .contextmenu div{ */
+/*     padding-left: 5px */
+/*     } */
+
+
+
+
+/* .sendButton { */
+/*   display: block; */
+/*   font-size: 16pt; */
+/* } */
+
+/* /** Most GWT widgets already have a style name defined */ */
+/* .gwt-DialogBox { */
+/*   width: 400px; */
+/* } */
+
+/* .dialogVPanel { */
+/*   margin: 5px; */
+/* } */
+
+/* .serverResponseLabelError { */
+/*   color: red; */
+/* } */
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+/* #closeButton { */
+/*   margin: 15px 6px 6px; */
+/* } */

@@ -1,0 +1,2 @@
+serviceClass: attendance.client.GreetingService
+path: 072FF74CAE6A652B8C11BB865020D810.gwt.rpc
