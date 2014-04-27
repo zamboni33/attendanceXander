@@ -94,7 +94,7 @@ public class StopAttendanceServlet extends HttpServlet {
 				
 				for(String time : times){
 					String[] parts = time.split(":");
-//					if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) + 15 == minuteOfDay){
+					if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) + 15 == minuteOfDay){
 						ArrayList<String> theseStudents = course.getStudents();
 						for(String studentEmail : theseStudents){
 							
@@ -189,7 +189,7 @@ public class StopAttendanceServlet extends HttpServlet {
 							}
 							
 						}
-//					}
+					}
 				}
 			}
 		}
