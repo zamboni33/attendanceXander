@@ -27,6 +27,8 @@
 #map_canvas {display: none}
 </style>
  
+ <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+ 
 <script
     src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 
@@ -113,6 +115,7 @@
 								
 								List<Course> courses = ObjectifyService.ofy().load().type(Course.class).list();
 								List<Professor> professors = ObjectifyService.ofy().load().type(Professor.class).list();
+								List<String> students = null;
 								
 							    if (courses.isEmpty()) {
 														%>
@@ -126,12 +129,17 @@
 							        		name="courseDropDown" 
 							        		style="width: 500px">
 									<%
-									    for(Course course : courses) {
+									    boolean flag = false;
+										for(Course course : courses) {
 									        if(course.getProfessor() == null){
-									    				pageContext.setAttribute("course_name", 
-									            		course.getClassTitle());
-									    				pageContext.setAttribute("course_unique", 
-											            		course.getClassUnique());
+									        	if(flag == false){
+									        		students = course.getStudents();
+									        		flag = true;
+									        	}
+							    				pageContext.setAttribute("course_name", 
+							            		course.getClassTitle());
+							    				pageContext.setAttribute("course_unique", 
+									            		course.getClassUnique());
 									    				
 									%>
 									        	<option value="${fn:escapeXml(course_unique)}"> 
@@ -146,19 +154,9 @@
 								</p>
 								
 								<p>Students:
-									<%
-										Professor thisProfessor = null;
-										for(Professor professor : professors){
-											if (professor.getEmail().equals (user.getEmail().toLowerCase()) ){
-												thisProfessor = professor;
-												break;
-											}
-										}
-									List<String> students = thisProfessor.getStudents();
-									
-									%>
+
 								
-								<SELECT NAME="studentList" SIZE="10" MULTIPLE >
+								<SELECT onchange="javascript:redraw(this)" NAME="studentList" SIZE="10" MULTIPLE >
 								
 									<%
 													for (String student : students) {
@@ -173,6 +171,36 @@
 												    }				
 												 %>	
 								</SELECT>
+								
+								<script>
+								var make=document.getElementById("studentList");
+								make.addEventListener('change', function redraw() {
+									alert("Change Called!");
+// 								    id = "related_" + $(this).val() + "_content";
+// 								    $("#" + id).show().siblings().hide()
+									var select = document.getElementById("studentList");
+									var length = select.options.length;
+									for (i = 0; i < length; i++) {
+									  select.options[i] = null;
+									}
+
+									<%
+									for (int i = 0; i < 4; i += 1) {
+								            		pageContext.setAttribute("student_name", 
+								            		i);
+								 %>
+								 $("select#studentList").append( $("<option>")
+										    .val("value")
+										    .html("text to be displayed");
+										);
+								 <%
+								        
+								    }				
+								 %>	
+								})
+								</script>
+								
+								
 								</p>
 								
 								<p>Course Location:
