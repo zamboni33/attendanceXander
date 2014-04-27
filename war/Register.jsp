@@ -27,37 +27,112 @@
 #map_canvas {display: none}
 </style>
  
- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
- 
 <script
     src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 
  </head>	
- 
+ <body style=""><meta charset="utf-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+             <title>Welcome - attendance.utexas.edu</title>
+            
+             <!-- Core CSS - Include with every page -->
+             <link href="css/bootstrap.min.css" rel="stylesheet">
+                 <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+                    
+                     <!-- Page-Level Plugin CSS - Dashboard -->
+                     <link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+                         <link href="css/plugins/timeline/timeline.css" rel="stylesheet">
+                            
+                             <!-- SB Admin CSS - Include with every page -->
+                             <link href="css/sb-admin.css" rel="stylesheet">
+                            
+                            
+     <!-- Page-Level Plugin CSS - Buttons -->
+     <link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
   <body>
+      <div id="wrapper">
+        
+          <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="AttendanceXander.jsp">attendance.utexas.edu</a>
+              </div>
+              <!-- /.navbar-header -->
+            
+              <ul class="nav navbar-top-links navbar-right">
+                
+                
+                
+                
+                
+                
+                  <li class="dropdown">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                          <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                      </a>
+                      <ul class="dropdown-menu dropdown-user">
+                        
+  						<%
+  						    UserService userService = UserServiceFactory.getUserService();
+  						    User user = userService.getCurrentUser();
+  						    if (user != null) {
+  						    	System.out.println(user);
+  						%>
+  						
+  								<li><a href="<%= userService.createLogoutURL(request.getRequestURI()) %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
+  						<%
+  							} 
+
+  						    else {
+  							%>
+  								<script type="text/javascript">
+  									window.location.href= 'SignIn';
+  								</script>
+  								<li><a href="<%= userService.createLoginURL(request.getRequestURI()) %>"><i class="fa fa-sign-in fa-fw"></i> Sign In</a></li>
+  								<li><a href="Init.jsp"><i class="fa fa-sign-in fa-fw"></i> Stock DataStore</a></li>
+  						<%
+  						    }
+  						%>
+                        
+                        
+                      </ul>
+                      <!-- /.dropdown-user -->
+                  </li>
+                  <!-- /.dropdown -->
+              </ul>
+              <!-- /.navbar-top-links -->
+            
+            
+              <!-- /.navbar-static-side -->
+          </nav>
  
-  	<div class="header">
-		Attendance Application Take 2
-	</div>
- 
-	<div class="main-wrap">	
-	
-		<div class="container">
-		
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Welcome to attendance.utexas.edu</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+
 		<script type="text/javascript">
 		window.onload = initializePosition();
 		</script>
-		
+
 		<%
-		    UserService userService = UserServiceFactory.getUserService();
-		    User user = userService.getCurrentUser();
 		    if (user != null) {
 		      pageContext.setAttribute("userEmail", user.getEmail());
 		    }
-		    
+
 			Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
 							.filter("email", Student.normalize(user.getEmail()) );
-			
+
 			for(Student student : queryStudent ) {
 				if(student.getAttendance() == true){
 					student.setLatitude((double) pageContext.getAttribute("userLatitude"));
@@ -65,58 +140,39 @@
 				}
 			}	
 		%>
-		
-		   	<div class="menu">
-				<p>Hello, ${fn:escapeXml(userEmail)}!</p> 
-				<br>
-				
-				Not you?
-				
-				 		<input 	type="button" 
-				 				onclick="SignOut();" 
-				 				value="Sign Out">
-				 				
-						<script>
-							function SignOut(){
-								window.location.href=(" <%=userService.createLogoutURL("/")%> ")
-							}
-						</script>
-			</div>
-		
-		
-		
-		
-			
-			<div class="content">
-			
+
+
+
+
+
+
 				    Register a Class
 
 				    <form action="/Register" method="post" onsubmit="return validateForm()" name="registerForm">
 						<div>
 							<p>Professor | Register</p>
-							
+
 							<p>First Name:
 									<input 	id="first"	
 											name="first">
 							</p>
-								
+
 							<p>Last Name:
-	
+
 									<input 	id="last"
 											name="last">
 							</p>
-							
+
 							<p>Course name:
-	
+
 								<%
 								ObjectifyService.register(Course.class);
 								ObjectifyService.register(Professor.class);
 								ObjectifyService.register(Student.class);
-								
+
 								List<Course> courses = ObjectifyService.ofy().load().type(Course.class).list();
 								List<Professor> professors = ObjectifyService.ofy().load().type(Professor.class).list();
-								List<String> students = null;
-								
+
 							    if (courses.isEmpty()) {
 														%>
 								        <p>Courses are empty. Shouldn't ever happen. WTF!</p>
@@ -129,18 +185,12 @@
 							        		name="courseDropDown" 
 							        		style="width: 500px">
 									<%
-									    boolean flag = false;
-										for(Course course : courses) {
+									    for(Course course : courses) {
 									        if(course.getProfessor() == null){
-									        	if(flag == false){
-									        		students = course.getStudents();
-									        		flag = true;
-									        	}
-							    				pageContext.setAttribute("course_name", 
-							            		course.getClassTitle());
-							    				pageContext.setAttribute("course_unique", 
+									        	pageContext.setAttribute("course_name", 
+									            		course.getClassTitle());
+									        	pageContext.setAttribute("course_unique", 
 									            		course.getClassUnique());
-									    				
 									%>
 									        	<option value="${fn:escapeXml(course_unique)}"> 
 									        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
@@ -152,85 +202,65 @@
 												 %>	
 								    	</select>	
 								</p>
-								
-								<p>Students:
 
-								
-								<SELECT onchange="javascript:redraw(this)" NAME="studentList" SIZE="10" MULTIPLE >
-								
+								<p>Students:
+									<%
+										Professor thisProfessor = null;
+										for(Professor professor : professors){
+											if (professor.getEmail().equals (user.getEmail().toLowerCase()) ){
+												thisProfessor = professor;
+												break;
+											}
+										}
+									List<String> students = thisProfessor.getStudents();
+
+									%>
+
+								<SELECT NAME="studentList" SIZE="10" MULTIPLE >
+
 									<%
 													for (String student : students) {
-												            		pageContext.setAttribute("student_name", 
-												            		student);
+														pageContext.setAttribute("student_name", 
+											            		student);
 												 %>
 												        	<option value="${fn:escapeXml(student_name)}"> 
 												        					${fn:escapeXml(student_name)}
 												            		</option>
 												 <%
-												        
+
 												    }				
 												 %>	
 								</SELECT>
-								
-								<script>
-								var make=document.getElementById("studentList");
-								make.addEventListener('change', function redraw() {
-									alert("Change Called!");
-// 								    id = "related_" + $(this).val() + "_content";
-// 								    $("#" + id).show().siblings().hide()
-									var select = document.getElementById("studentList");
-									var length = select.options.length;
-									for (i = 0; i < length; i++) {
-									  select.options[i] = null;
-									}
-
-									<%
-									for (int i = 0; i < 4; i += 1) {
-								            		pageContext.setAttribute("student_name", 
-								            		i);
-								 %>
-								 $("select#studentList").append( $("<option>")
-										    .val("value")
-										    .html("text to be displayed");
-										);
-								 <%
-								        
-								    }				
-								 %>	
-								})
-								</script>
-								
-								
 								</p>
-								
+
 								<p>Course Location:
-								
-	
+
+
 									<input 	id="latitude"
 											name="latitude"
 											type="number"
 											readonly>
-											
+
 									<input 	id="longitude"
 											name="longitude"
 											type="number"
 											readonly>
 								</p>
-									
+
 									<div 	id="map_canvas" 
 											style="height:300px; 
 											width:500px">
 											</div>
-	
-							
-	
+
+
+
 								<input 	type="submit" 
 										name="registerClass" 
 										value="Submit">
 						</div>				    
-				    
+
 				    </form>
-					
+
 					<script>
 					function validateForm()
 					{
@@ -248,43 +278,42 @@
 					  	}
 					}
 					</script>
-					
-			</div>
-			
+
+
 			<input 		id="mapButton" 
 						name="mapButton" 
 						type="button" 
 						onclick="displayMap()" 
 						value = "Show Map">
-			
+
 			<input 		id="locationButton" 
 						type="button" 
 						onclick="initializePosition()" 
 						value="Use Current Location">
-						
+
 			<form action="/SaveClassroom" method="post" name="classroomForm">
 					<input 	id="classroomName"
 							name="classroomName">
-					
+
 					<input 	id="classroomLat"
 							name="classroomLat"
 							type="number"
 							readonly>
-							
+
 					<input 	id="classroomLon"
 							name="classroomLon"
 							type="number"
 							readonly>
-							
+
 			<input		id="SubmitClassroom"
 						type="submit"
 						value="Submit Classroom">
 			</form>
-			
+
 			<script type="text/javascript">
 			var map;
 			var austin = new google.maps.LatLng(30.286142,-97.739343);
-			
+
 			function displayMap() {
 				if (document.getElementById('map_canvas').style.display != "block"){
 					document.getElementById('map_canvas').style.display="block";
@@ -295,7 +324,7 @@
 					document.getElementById('mapButton').value = "Show Map";
 				}
 			}
-			
+
 			function initialize() {
 			  var mapOptions = {
 			    zoom: 10,
@@ -320,19 +349,19 @@
 																	});
 			}
 
-			
+
 
 			var initialLocation;
 			var austin = new google.maps.LatLng(30.2500, -97.7500);
 			var browserSupportFlag =  new Boolean();
-			
+
 			function initializePosition() {
 			  var myOptions = {
 			    zoom: 6,
 			    mapTypeId: google.maps.MapTypeId.ROADMAP
 			  };
 // 			  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-			
+
 			  // Try W3C Geolocation (Preferred)
 			  if(navigator.geolocation) {
 			    browserSupportFlag = true;
@@ -353,7 +382,7 @@
 			    browserSupportFlag = false;
 			    handleNoGeolocation(browserSupportFlag);
 			  }
-			
+
 			  function handleNoGeolocation(errorFlag) {
 			    if (errorFlag == true) {
 			      alert("Geolocation service failed. Placing you in Austin.");
@@ -366,15 +395,15 @@
 			  }
 			}
 
-			
 
-				
+
+
 				</script>	
-				
+
 <!-- Context Menu Stuff (Deprecated)				 -->
 				<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
-				
+
 				<script type="text/javascript">
 /*				
 				function getCanvasXY(caurrentLatLng){
@@ -417,29 +446,29 @@
 				          contextmenuDir.className  = 'contextmenu';
 				          contextmenuDir.innerHTML = "<a id='menu1' href='javascript:void(0);' onclick='fillLocation(\''+caurrentLatLng+'\')'><div class=context>Use This Location<\/div><\/a>";
 				        $(map.getDiv()).append(contextmenuDir);
-				        
+
 				        setMenuXY(caurrentLatLng);
 
 				        contextmenuDir.style.visibility = "visible";
 				       }
-				
+
 				function fillLocation(caurrentLatLng){
 					alert("clicked");
 // 				      document.getElementById('latitude').value = caurrentLatLng.lat();
 // 				      document.getElementById('longitude').value = caurrentLatLng.lng();
 				      $('.contextmenu').remove();
 				}
-				  
+
 				$(document).ready(function(){
 					initialize();
 				});
 */				
 				</script>
 <!-- Context Menu Stuff (Deprecated)				 -->			
-	
+
 		</div>
-			
-			
+
+
 	</div>
 </div>
 

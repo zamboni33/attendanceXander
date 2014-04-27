@@ -22,45 +22,63 @@
 
 
 <html>
- <head>
+	<head>
  
-<!--  <link type="text/css" rel="stylesheet" href="main.css"> -->
+		<%
+	    	UserService userService = UserServiceFactory.getUserService();
+	    	User user = userService.getCurrentUser();
+	    	Query<Student> students = null;
+	    	if (user==null)
+	    	{
+	    		%>
+			
+			<script type="text/javascript">
+				window.location.href= 'SignIn';
+			</script>
+				
+			<%
+	    	} else {
+			students = ObjectifyService.ofy().load().type(Student.class)
+										.filter("email", Student.normalize(user.getEmail()) );
+		}
+	 
+		%> 
  
- <style type="text/css">
-#map_canvas {display: none}
-</style>
+		<style type="text/css">
+			#map_canvas {display: none}
+		</style>
  
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 
-<!--   Calendar Additions   -->
-<link rel="stylesheet" href="css/bootstrap.css">
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.js"></script>
-<script src="js/responsive-calendar.js"></script>
+		<!--   Calendar Additions   -->
+		<link rel="stylesheet" href="css/bootstrap.css">
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jquery.js"></script>
+		<script src="js/responsive-calendar.js"></script>
 
-<!--   Calendar Additions End   -->
+		<!--   Calendar Additions End   -->
 
-  <body style=""><meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<body style=""><meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
             
-            <title>Student Dashboard</title>
+		<title>Student Dashboard</title>
             
-            <!-- Core CSS - Include with every page -->
-            <link href="css/bootstrap.min.css" rel="stylesheet">
-                <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+		<!-- Core CSS - Include with every page -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="font-awesome/css/font-awesome.css" rel="stylesheet">
                     
-                    <!-- Page-Level Plugin CSS - Dashboard -->
-                    <link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-                        <link href="css/plugins/timeline/timeline.css" rel="stylesheet">
+		<!-- Page-Level Plugin CSS - Dashboard -->
+		<link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+		<link href="css/plugins/timeline/timeline.css" rel="stylesheet">
                             
-                            <!-- SB Admin CSS - Include with every page -->
-                            <link href="css/sb-admin.css" rel="stylesheet">
+		<!-- SB Admin CSS - Include with every page -->
+		<link href="css/sb-admin.css" rel="stylesheet">
                             
                             
-    <!-- Page-Level Plugin CSS - Buttons -->
-    <link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
+		<!-- Page-Level Plugin CSS - Buttons -->
+		<link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
 
-</head>                                
+	</head>                                
 
 
 
@@ -93,24 +111,18 @@
                     <ul class="dropdown-menu dropdown-user">
                         
 						<%
-						    UserService userService = UserServiceFactory.getUserService();
-						    User user = userService.getCurrentUser();
-						    if (user != null) {
-						    	System.out.println(user);
-						%>
-								<script type="text/javascript">
-									window.location.href= 'SignIn';
-								</script>
-						<%
-							} 
+ 						    if (user != null) {
+ 						%>
+ 								<li><a href="<%= userService.createLogoutURL(request.getRequestURI()) %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
+ 						<%
+ 							} 
 				    
-						    else {
-							%>
-								<li><a href="SignIn.jsp"><i class="fa fa-sign-in fa-fw"></i> Sign In</a></li>
-								<li><a href="Init.jsp"><i class="fa fa-sign-in fa-fw"></i> Stock DataStore</a></li>
-						<%
-						    }
-						%>
+ 						    else {
+ 							%>
+ 								<li><a href="<%= userService.createLoginURL(request.getRequestURI()) %>"><i class="fa fa-sign-in fa-fw"></i> Sign In</a></li>
+ 						<%
+ 						    }
+ 						%>
                         
                         
                     </ul>
@@ -136,47 +148,51 @@
 		<script type="text/javascript">
 		window.onload = initializePosition();
 		</script>
+
+	  	<% 
+	  	
+	  	Student actualStudent = null;
+	  	if (students==null)
+		{
+			%>
+			
+			<script type="text/javascript">
+				window.location.href= 'SignIn';
+			</script>
+				
+			<%
+		} else {
+	  	for (Student s : students)
+	  	{
+	  			actualStudent = s;
+	  	}
 		
-		<%
-		    if (user != null) {
-		      pageContext.setAttribute("userEmail", user.getEmail());
-		    }	
-		%>
-		
-		   	<div class="menu">
-				<p>Hello, ${fn:escapeXml(userEmail)}!</p> 
-				<br>
-				
-				Not you?
-				
-				 		<input 	type="button" 
-				 				onclick="SignOut();" 
-				 				value="Sign Out">
-				 				
-						<script>
-							function SignOut(){
-								window.location.href=(" <%=userService.createLogoutURL("/")%> ")
-							}
-						</script>
-				
+	  	pageContext.setAttribute("stud_email",
+					actualStudent.getEmail());
+	  	%>
+	  		<blockquote>Hello, ${fn:escapeXml(stud_email)}!</blockquote>
+	    	<div id="chart_div" style="width: 900px; height: 500px;"></div>
+	    	<%} %>
+
 				Student Dashboard
 
-			
+
 				<input id="locationButton" 
 							type="button" 
 							onclick="initializePosition()" 
 							value="Establish Your Location">
-									
+
 
 				    <form action="/Locate" method="post" onsubmit="return validateForm()" name="locateForm">
 						<div>
 
-								
+
 								<p>
-								
-								<% 		Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
+
+								<% 		
+											Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
 										.filter("email", Student.normalize(user.getEmail() )); 
-										
+
 										for(Student student : queryStudent ) {
 											if(student.getLatitude() != 0.0 
 													&& student.getLatitude() != 0.0){
@@ -192,21 +208,20 @@
 												<%
 											}
 										}
-	
-										
+
 									%>
-									
+
 									<script>
 									Number.prototype.toRad = function() {
 									   return this * Math.PI / 180;
 									}
-									
+
 									function haversine(){
 										var lat2 = 42.741; 
 										var lon2 = -71.3161; 
 										var lat1 = 42.806911; 
 										var lon1 = -71.290611; 
-										
+
 										var R = 6371; // km 
 										//has a problem with the .toRad() method below.
 										var x1 = lat2-lat1;
@@ -220,28 +235,28 @@
 										var d = R * c; 
 									}
 									</script>
-									
-									
+
+
 									Your Location:
-									
+
 									<input 	id="latitude"
 											name="latitude"
 											type="number"
 											readonly>
-											
+
 									<input 	id="longitude"
 											name="longitude"
 											type="number"
 											readonly>
 								</p>
-	
+
 								<input 	type="submit" 
 										name="locateClass"
 										value="Submit">
 						</div>				    
-				    
+
 				    </form>
-	
+
 	<section>			    
 					<head>
 					<link href="css/responsive-calendar.css" rel="stylesheet" media="screen">
@@ -267,13 +282,13 @@
 							  </div>
 							</div>
 					<!-- 	Responsive calendar - END -->
-					
-						
+
+
 					    <script src="../js/jquery.js"></script>
 					    <script src="../js/bootstrap.min.js"></script>
 					    <script src="../js/responsive-calendar.js"></script>
 					    <script type="text/javascript">
-					    
+
 					    // Get me the current date
 					    var currentTime = new Date()
 					    var day = currentTime.getDate()
@@ -283,11 +298,11 @@
 					    var year = currentTime.getFullYear()
 					    var calendarStart = year + '-' + month
 					    var today = year + '-' + month + '-' + day
-					    
+
 					       $(document).ready(function () {
 					         $(".responsive-calendar").responsiveCalendar({
 					        	 time: calendarStart,
-					           
+
 					        	 events: {
 					    		 today : {"today": 1},
 					         	 "2014-03-30": {"absentPresent": 1},
@@ -298,23 +313,23 @@
 					             "2014-04-03": {"absentPresent": 0},
 					             "2014-04-08": {"absentPresent": 1},
 					             "2014-04-10": {"absentPresent": 0}
-					           
+
 					           }
 					         });
 					       });
 					     </script>
-						
+
 					</section>	
-				    
-				    
-				    
-				    
-				    
-				    
-				    
-				    
-				    
-					
+
+
+
+
+
+
+
+
+
+
 					<script>
 					function validateForm()
 					{
@@ -329,13 +344,13 @@
 					  	}
 					}
 					</script>
-					
+
 			</div>	
-			
+
 			<script type="text/javascript">
 			var map;
 			var austin = new google.maps.LatLng(30.2500, -97.7500);
-			
+
 			function displayMap() {
 				if (document.getElementById('map_canvas').style.display != "block"){
 					document.getElementById('map_canvas').style.display="block";
@@ -346,7 +361,7 @@
 					document.getElementById('mapButton').value = "Show Map";
 				}
 			}
-			
+
 			function initialize() {
 			  var mapOptions = {
 			    zoom: 8,
@@ -371,19 +386,19 @@
 																	});
 			}
 
-			
+
 
 			var initialLocation;
 			var austin = new google.maps.LatLng(30.2500, -97.7500);
 			var browserSupportFlag =  new Boolean();
-			
+
 			function initializePosition() {
 			  var myOptions = {
 			    zoom: 6,
 			    mapTypeId: google.maps.MapTypeId.ROADMAP
 			  };
 // 			  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-			
+
 			  // Try W3C Geolocation (Preferred)
 			  if(navigator.geolocation) {
 			    browserSupportFlag = true;
@@ -402,7 +417,7 @@
 			    browserSupportFlag = false;
 			    handleNoGeolocation(browserSupportFlag);
 			  }
-			
+
 			  function handleNoGeolocation(errorFlag) {
 			    if (errorFlag == true) {
 			      alert("Geolocation service failed. Placing you in Austin.");
@@ -414,7 +429,7 @@
 // 			    map.setCenter(initialLocation);
 			  }
 			}
-			
+
 			</script>
 
 
@@ -426,9 +441,9 @@
     <!-- /#wrapper -->
     
     <!-- Core Scripts - Include with every page -->
-    <script src="js/jquery-1.10.2.js"></script>
+    <!-- <script src="js/jquery-1.10.2.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script> -->
     
     <!-- Page-Level Plugin Scripts - Dashboard -->
     <script src="js/plugins/morris/raphael-2.1.0.min.js"></script>
