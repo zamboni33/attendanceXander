@@ -28,6 +28,9 @@ public class SignInServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
 	
+    if (user==null)
+    	resp.sendRedirect("/");
+    
 	// Where is the best place to register these?
 	ObjectifyService.register(Professor.class);
 	ObjectifyService.register(Student.class);

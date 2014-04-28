@@ -109,7 +109,7 @@ public class RegisterServlet extends HttpServlet {
 				ofy().save().entities(existingStudent).now();
 				
 				Attendance newAttendance = new Attendance(attendanceKey);
-//				newAttendance.assignAbsent("2014-04-23");
+				newAttendance.assignAbsent("0000-00-00");
 				ofy().save().entities(newAttendance).now();
 			}
 			else {
@@ -123,7 +123,7 @@ public class RegisterServlet extends HttpServlet {
 				ofy().save().entities(thisStudent).now();
 				
 				Attendance newAttendance = new Attendance(attendanceKey);
-				newAttendance.assignAbsent("2014-04-26");
+				newAttendance.assignAbsent("0000-00-00");
 				ofy().save().entities(newAttendance).now();
 			}
 		}				

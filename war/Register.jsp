@@ -21,14 +21,100 @@
 <html>
  
  <head>
- <link type="text/css" rel="stylesheet" href="main.css">
+<!--  <link type="text/css" rel="stylesheet" href="main.css"> -->
  
- <style type="text/css">
-#map_canvas {display: none}
-</style>
+<!--  <style type="text/css"> -->
+<!-- #map_canvas {display: none} -->
+<!-- </style> -->
  
-<script
-    src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+	<script
+    	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">
+	</script>
+    
+    
+    
+    
+			<script type="text/javascript">
+			var map;
+			var markers = [];
+			var austin = new google.maps.LatLng(30.286142,-97.739343);
+			
+			window.onload=function(){
+				initialize();
+	 			window.onload=displayMap();
+			}
+
+			function displayMap() {
+				if (document.getElementById('map_canvas').style.display != "block"){
+					document.getElementById('map_canvas').style.display="block";
+					initialize();
+					document.getElementById('mapButton').value = "Hide Map";
+				} else {
+					document.getElementById('map_canvas').style.display="none";
+					document.getElementById('mapButton').value = "Show Map";
+				}
+			}
+
+			function initialize() {
+				var UT = new google.maps.LatLng(30.28571574871247, -97.73536205291748);
+			  var mapOptions = {
+			    zoom: 15,
+			    center: UT
+			  };
+			  map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+// 			  google.maps.event.addListener(map, "rightclick",function(event){showContextMenu(event.latLng);});
+			google.maps.event.addListener(map, "rightclick", function(event) {
+			    deleteMarkers();
+				
+				var lat = event.latLng.lat();
+			    var lng = event.latLng.lng();
+			    var myLatlng = new google.maps.LatLng(lat,lng);
+			    var marker = new google.maps.Marker({
+			        position: myLatlng,
+			        map: map,
+			        title: 'Your Position'
+			    });
+			    markers.push(marker);
+			    // populate yor box/field with lat, lng
+			      document.getElementById('latitude').value = lat;
+			      document.getElementById('longitude').value = lng;
+// 			      alert("Lat=" + lat + "; Lng=" + lng);
+			});			  
+// 			  alert("Map Created!");
+				google.maps.event.addDomListener(window, 'load', initialize);
+				google.maps.event.addDomListener(window, "resize", function() {
+																	 var center = map.getCenter();
+																	 google.maps.event.trigger(map, "resize");
+																	 $('.contextmenu').remove(); 
+																	});
+			}
+
+			
+			// Sets the map on all markers in the array.
+			function setAllMap(map) {
+			  for (var i = 0; i < markers.length; i++) {
+			    markers[i].setMap(map);
+			  }
+			}
+
+			// Removes the markers from the map, but keeps them in the array.
+			function clearMarkers() {
+// 			  alert("Deleting Markers.");
+			  setAllMap(null);
+			}
+
+			// Shows any markers currently in the array.
+			function showMarkers() {
+			  setAllMap(map);
+			}
+
+			// Deletes all markers in the array by removing references to them.
+			function deleteMarkers() {
+			  clearMarkers();
+			  markers = [];
+			}
+			</script>    
+    
 
  </head>	
  <body style=""><meta charset="utf-8">
@@ -72,45 +158,42 @@
                 
                 
                 
-                  <li class="dropdown">
-                      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                          <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                      </a>
-                      <ul class="dropdown-menu dropdown-user">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
                         
   						<%
   						    UserService userService = UserServiceFactory.getUserService();
   						    User user = userService.getCurrentUser();
-  						    if (user != null) {
-  						    	System.out.println(user);
-  						%>
-  						
-  								<li><a href="<%= userService.createLogoutURL(request.getRequestURI()) %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
-  						<%
-  							} 
 
-  						    else {
-  							%>
-  								<script type="text/javascript">
-  									window.location.href= 'SignIn';
-  								</script>
-  								<li><a href="<%= userService.createLoginURL(request.getRequestURI()) %>"><i class="fa fa-sign-in fa-fw"></i> Sign In</a></li>
-  								<li><a href="Init.jsp"><i class="fa fa-sign-in fa-fw"></i> Stock DataStore</a></li>
-  						<%
-  						    }
-  						%>
+ 						    if (user != null) {
+ 						%>
+ 								<li><a href="<%= userService.createLogoutURL("/") %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
+ 						<%
+ 							} 
+				    
+ 						    else {
+ 							%>
+ 								<script type="text/javascript">
+ 								window.location.href="/";
+ 								</script>
+ 						<%
+ 						    }
+ 						%>
                         
                         
-                      </ul>
-                      <!-- /.dropdown-user -->
-                  </li>
-                  <!-- /.dropdown -->
-              </ul>
-              <!-- /.navbar-top-links -->
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
             
             
-              <!-- /.navbar-static-side -->
-          </nav>
+            <!-- /.navbar-static-side -->
+        </nav>
  
     <div id="page-wrapper">
         <div class="row">
@@ -140,11 +223,6 @@
 				}
 			}	
 		%>
-
-
-
-
-
 
 				    Register a Class
 
@@ -309,48 +387,15 @@
 						type="submit"
 						value="Submit Classroom">
 			</form>
+			
+	</div>
 
-			<script type="text/javascript">
-			var map;
-			var austin = new google.maps.LatLng(30.286142,-97.739343);
-
-			function displayMap() {
-				if (document.getElementById('map_canvas').style.display != "block"){
-					document.getElementById('map_canvas').style.display="block";
-					initialize();
-					document.getElementById('mapButton').value = "Hide Map";
-				} else {
-					document.getElementById('map_canvas').style.display="none";
-					document.getElementById('mapButton').value = "Show Map";
-				}
-			}
-
-			function initialize() {
-			  var mapOptions = {
-			    zoom: 10,
-			    center: new google.maps.LatLng(30.2500, -97.7500)
-			  };
-			  map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-// 			  google.maps.event.addListener(map, "rightclick",function(event){showContextMenu(event.latLng);});
-			google.maps.event.addListener(map, "rightclick", function(event) {
-			    var lat = event.latLng.lat();
-			    var lng = event.latLng.lng();
-			    // populate yor box/field with lat, lng
-			      document.getElementById('latitude').value = lat;
-			      document.getElementById('longitude').value = lng;
-// 			      alert("Lat=" + lat + "; Lng=" + lng);
-			});			  
-// 			  alert("Map Created!");
-				google.maps.event.addDomListener(window, 'load', initialize);
-				google.maps.event.addDomListener(window, "resize", function() {
-																	 var center = map.getCenter();
-																	 google.maps.event.trigger(map, "resize");
-																	 $('.contextmenu').remove(); 
-																	});
-			}
+</div>
 
 
-
+			
+			
+			<script>
 			var initialLocation;
 			var austin = new google.maps.LatLng(30.2500, -97.7500);
 			var browserSupportFlag =  new Boolean();
@@ -395,82 +440,7 @@
 			  }
 			}
 
-
-
-
-				</script>	
-
-<!-- Context Menu Stuff (Deprecated)				 -->
-				<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-				<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
-
-				<script type="text/javascript">
-/*				
-				function getCanvasXY(caurrentLatLng){
-				      var scale = Math.pow(2, map.getZoom());
-				     var nw = new google.maps.LatLng(
-				         map.getBounds().getNorthEast().lat(),
-				         map.getBounds().getSouthWest().lng()
-				     );
-				     var worldCoordinateNW = map.getProjection().fromLatLngToPoint(nw);
-				     var worldCoordinate = map.getProjection().fromLatLngToPoint(caurrentLatLng);
-				     var caurrentLatLngOffset = new google.maps.Point(
-				         Math.floor((worldCoordinate.x - worldCoordinateNW.x) * scale),
-				         Math.floor((worldCoordinate.y - worldCoordinateNW.y) * scale)
-				     );
-				     return caurrentLatLngOffset;
-				  }
-				  function setMenuXY(caurrentLatLng){
-				    var mapWidth = $('#map_canvas').width();
-				    var mapHeight = $('#map_canvas').height();
-				    var menuWidth = $('.contextmenu').width();
-				    var menuHeight = $('.contextmenu').height();
-				    var clickedPosition = getCanvasXY(caurrentLatLng);
-				    var x = clickedPosition.x ;
-				    var y = clickedPosition.y ;
-
-				     if((mapWidth - x ) < menuWidth)
-				         x = x - menuWidth;
-				    if((mapHeight - y ) < menuHeight)
-				        y = y - menuHeight;
-
-				    $('.contextmenu').css('left',x  );
-				    $('.contextmenu').css('top',y );
-				    };
-				  function showContextMenu(caurrentLatLng  ) {
-				        var projection;
-				        var contextmenuDir;
-				        projection = map.getProjection() ;
-				        $('.contextmenu').remove();
-				            contextmenuDir = document.createElement("div");
-				          contextmenuDir.className  = 'contextmenu';
-				          contextmenuDir.innerHTML = "<a id='menu1' href='javascript:void(0);' onclick='fillLocation(\''+caurrentLatLng+'\')'><div class=context>Use This Location<\/div><\/a>";
-				        $(map.getDiv()).append(contextmenuDir);
-
-				        setMenuXY(caurrentLatLng);
-
-				        contextmenuDir.style.visibility = "visible";
-				       }
-
-				function fillLocation(caurrentLatLng){
-					alert("clicked");
-// 				      document.getElementById('latitude').value = caurrentLatLng.lat();
-// 				      document.getElementById('longitude').value = caurrentLatLng.lng();
-				      $('.contextmenu').remove();
-				}
-
-				$(document).ready(function(){
-					initialize();
-				});
-*/				
-				</script>
-<!-- Context Menu Stuff (Deprecated)				 -->			
-
-		</div>
-
-
-	</div>
-</div>
+				</script>			
 
 <div class="footer">
 	Software Development 461L

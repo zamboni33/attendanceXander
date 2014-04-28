@@ -64,6 +64,8 @@ public class InitServlet extends HttpServlet {
 			students.add(blake);
 			String jewliano = new String("giulianoprado@gmail.com");
 			students.add(jewliano);
+			String colin = new String("colin.hickman@utexas.edu");
+			students.add(colin);
 			
 			Professor newProfessor = new Professor (req.getParameter("email"), students);
 			ofy().save().entities(newProfessor).now();
@@ -86,7 +88,7 @@ public class InitServlet extends HttpServlet {
 			ArrayList<String> times = new ArrayList<String>();
 			times.add("17:55");
 			times.add("13:12");
-//			times.add("17:55");
+			times.add("18:00");
 //			times.add("17:55");
 			Course newCourse = new Course ("CPE 2.238", "Software Development", "12345", 
 												days, times, students);

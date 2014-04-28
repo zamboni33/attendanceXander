@@ -15,13 +15,18 @@ public class Attendance {
 	@Id String attendanceKey;
 	@Persistent(serialized="true")
 	HashMap<String, Boolean> attendance;
-	ArrayList<String> attendanceList;
 	
 	public Attendance(){}
 	
 	public Attendance(String attendanceKey){
 		this.attendanceKey = attendanceKey;
 		this.attendance = new HashMap<String, Boolean>();
+	}
+	
+	// Copy Constructor
+	public Attendance(Attendance copy){
+		this.attendanceKey = new String (copy.getAttendanceKey());
+		this.attendance = new HashMap<String, Boolean>(copy.getAttendance());
 	}
 	
 	public String getAttendanceKey(){

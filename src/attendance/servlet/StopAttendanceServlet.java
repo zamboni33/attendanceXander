@@ -94,7 +94,7 @@ public class StopAttendanceServlet extends HttpServlet {
 				
 				for(String time : times){
 					String[] parts = time.split(":");
-					if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) + 15 == minuteOfDay){
+//					if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) + 15 == minuteOfDay){
 						ArrayList<String> theseStudents = course.getStudents();
 						for(String studentEmail : theseStudents){
 							
@@ -118,23 +118,24 @@ public class StopAttendanceServlet extends HttpServlet {
 		//							TODO THIS IS WHERE WE RUN THE HAVERSINE AND MARK ATTENDANT OR ABSENT
 									Double distance = new Double (haversine(course.getLatitude(), course.getLongitude(),
 															student.getLatitude(), student.getLongitude()));
-								
-									Student cron9 = new Student("Test9", distance.toString());
-									ofy().save().entities(cron9).now();
+							
 									
 									if(distance < 50){
 										String attendanceKey = new String(course.getClassUnique() + student.getEmail());
 										Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
 										for(Attendance dayTable : attendance){
 											
-											Attendance temp = new Attendance(dayTable.getAttendanceKey());
-											HashMap<String, Boolean> tempMap = new HashMap<String, Boolean>(dayTable.getAttendance());
-											temp.setAttendance(tempMap);
-											temp.assignPresent(dateCalendar);
+											Attendance temp = new Attendance(dayTable);
+//											HashMap<String, Boolean> tempMap = new HashMap<String, Boolean>(dayTable.getAttendance());
+//											tempMap.put(dateCalendar, true);
+											temp.assignPresent(dateCalendar);										
+//											temp.setAttendance(tempMap);
+											ofy().save().entity(temp).now();
 											
-											resp.getWriter().println(tempMap.toString());
+//											resp.getWriter().println(tempMap.toString());
 											
-											ofy().save().entities(temp).now();
+											Student cron9 = new Student("Test9", distance.toString());
+											ofy().save().entities(cron9).now();
 											
 //											dayTable.assignPresent(dateCalendar);
 //											ofy().save().entities(dayTable).now();
@@ -147,11 +148,9 @@ public class StopAttendanceServlet extends HttpServlet {
 											
 											Attendance temp = new Attendance(dayTable.getAttendanceKey());
 											HashMap<String, Boolean> tempMap = new HashMap<String, Boolean>(dayTable.getAttendance());
+											tempMap.put(dateCalendar, false);
+//											temp.assignAbsent(dateCalendar);										
 											temp.setAttendance(tempMap);
-											temp.assignAbsent(dateCalendar);
-											
-//											resp.getWriter().println(tempMap.toString());
-											
 											ofy().save().entities(temp).now();
 											
 //											dayTable.assignAbsent(dateCalendar);
@@ -169,11 +168,9 @@ public class StopAttendanceServlet extends HttpServlet {
 										
 										Attendance temp = new Attendance(dayTable.getAttendanceKey());
 										HashMap<String, Boolean> tempMap = new HashMap<String, Boolean>(dayTable.getAttendance());
+										tempMap.put(dateCalendar, false);
+//										temp.assignAbsent(dateCalendar);										
 										temp.setAttendance(tempMap);
-										temp.assignAbsent(dateCalendar);
-										
-//										resp.getWriter().println(tempMap.toString());
-										
 										ofy().save().entities(temp).now();
 										
 //										dayTable.assignAbsent(dateCalendar);
@@ -189,7 +186,7 @@ public class StopAttendanceServlet extends HttpServlet {
 							}
 							
 						}
-					}
+//					}
 				}
 			}
 		}
@@ -198,14 +195,14 @@ public class StopAttendanceServlet extends HttpServlet {
 	
 	public Double haversine(Double lat1, Double lon1, Double lat2, Double lon2) {
         // TODO Auto-generated method stub
-        final int R = 6371000; // Radius of the earth
+        final int R = 6371; // Radius of the earth
         Double latDistance = toRad(lat2-lat1);
         Double lonDistance = toRad(lon2-lon1);
         Double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + 
                    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
                    Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        Double distance = new Double(R * c);
+        Double distance = new Double(R * c * 1000);
          
         return distance;
  
