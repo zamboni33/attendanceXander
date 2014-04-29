@@ -94,18 +94,31 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Report a bug</h1>
+                    <h1 class="page-header">Signup</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
-            
+            <form action="/createUser" method="post">
+
+					<h3>Is this your first time logging in?</h3><br>
+					<div>
+					<% pageContext.setAttribute("user_email",
+							(user!=null?user.getEmail():"")); %>
+						<input name="email" type="hidden" rows="1" cols="120" value="${fn:escapeXml(user_email)}"></input>
+					</div>
+		
+			<br>
+					<div>
+						<button type="submit" class="btn btn-primary" name="postButton">Register</button>
+					</div>
+			</form>
 			<form action="/sendEmail" method="post">
 
-					<h3>Sorry, you are not in the database or there is a bug in the website. Please report your problem in the form below: </h3><br>
+					<h3>If you already have an account, please report your problem in the form below: </h3><br>
 					<h4>First Name:</h4>
 					<div>
-						<input name="first" rows="1" cols="60" value="<% if (user!=null) {user.getEmail();}%>"></input>
+						<input name="first" rows="1" cols="60"></input>
 					</div>
 					<h4>Last Name:</h4>
 					<div>
@@ -113,11 +126,11 @@
 					</div>
 					<h4>Email:</h4>
 					<div>
-						<input name="email" rows="1" cols="60"></input>
+						<input name="email" rows="1" cols="120"></input>
 					</div>
 					<h4>Describe the problem:<h4>
 					<div>
-						<textarea name="description" rows="40" cols="100"></textarea>
+						<textarea name="description" rows="15" cols="100"></textarea>
 					</div>
 		
 			<br>
