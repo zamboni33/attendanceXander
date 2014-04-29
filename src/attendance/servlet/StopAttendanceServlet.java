@@ -120,21 +120,18 @@ public class StopAttendanceServlet extends HttpServlet {
 															student.getLatitude(), student.getLongitude()));
 							
 									
-									if(distance < 50){
+									if(distance < 500){
 										String attendanceKey = new String(course.getClassUnique() + student.getEmail());
 										Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
 										for(Attendance dayTable : attendance){
 											
-											Attendance temp = new Attendance(dayTable);
-//											HashMap<String, Boolean> tempMap = new HashMap<String, Boolean>(dayTable.getAttendance());
-//											tempMap.put(dateCalendar, true);
-											temp.assignPresent(dateCalendar);										
-//											temp.setAttendance(tempMap);
-											ofy().save().entity(temp).now();
+											dayTable.assignPresent(dateCalendar);
+											ofy().save().entity(dayTable).now();
 											
-//											resp.getWriter().println(tempMap.toString());
-											resp.getWriter().println(student.getEmail());
-											resp.getWriter().println(distance.toString());
+//											resp.getWriter().println(dateCalendar);
+//											resp.getWriter().println(dayTable.getAttendance().toString());
+//											resp.getWriter().println(student.getEmail());
+//											resp.getWriter().println(distance.toString());
 											
 											Student cron9 = new Student("Test9", distance.toString());
 											ofy().save().entities(cron9).now();
@@ -148,15 +145,13 @@ public class StopAttendanceServlet extends HttpServlet {
 										Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
 										for(Attendance dayTable : attendance){
 											
-											Attendance temp = new Attendance(dayTable.getAttendanceKey());
-											HashMap<String, Boolean> tempMap = new HashMap<String, Boolean>(dayTable.getAttendance());
-											tempMap.put(dateCalendar, false);
-//											temp.assignAbsent(dateCalendar);										
-											temp.setAttendance(tempMap);
-											ofy().save().entities(temp).now();
+											dayTable.assignPresent(dateCalendar);
+											ofy().save().entity(dayTable).now();
 											
-											resp.getWriter().println(student.getEmail());
-											resp.getWriter().println(distance.toString());
+//											resp.getWriter().println(dateCalendar);
+//											resp.getWriter().println(dayTable.getAttendance().toString());
+//											resp.getWriter().println(student.getEmail());
+//											resp.getWriter().println(distance.toString());
 											
 //											dayTable.assignAbsent(dateCalendar);
 //											ofy().save().entities(dayTable).now();
@@ -171,12 +166,8 @@ public class StopAttendanceServlet extends HttpServlet {
 										Student cron8 = new Student("Test8", attendanceKey);
 										ofy().save().entities(cron8).now();
 										
-										Attendance temp = new Attendance(dayTable.getAttendanceKey());
-										HashMap<String, Boolean> tempMap = new HashMap<String, Boolean>(dayTable.getAttendance());
-										tempMap.put(dateCalendar, false);
-//										temp.assignAbsent(dateCalendar);										
-										temp.setAttendance(tempMap);
-										ofy().save().entities(temp).now();
+										dayTable.assignPresent(dateCalendar);
+										ofy().save().entity(dayTable).now();
 										
 //										dayTable.assignAbsent(dateCalendar);
 //										ofy().save().entities(dayTable).now();
