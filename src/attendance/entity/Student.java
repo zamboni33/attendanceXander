@@ -12,12 +12,15 @@ import java.util.ArrayList;
 @Entity
 public class Student {
 	@Id String email;
+	String first;
+	String last;
 	boolean registered;
 	int courseCount;
 	boolean recordLocation;
 	double latitude;
 	double longitude;
 	ArrayList<String> attendanceKey;
+	ArrayList<String> courses;
 	
 	
 	/** Use this method to normalize email addresses for lookup */
@@ -34,6 +37,8 @@ public class Student {
 	public Student (String email, String course)
 	{
 		this.email = email;
+		this.first = null;
+		this.last = null;
 		this.registered = false;
 		this.recordLocation = false;
 		this.latitude = 0.0;
@@ -41,6 +46,8 @@ public class Student {
 		String temp = new String(course + email);
 		this.attendanceKey = new ArrayList<String>();
 		this.attendanceKey.add(temp);
+		this.courses = new ArrayList<String>();
+		this.courses.add(course);
 		
 	}
 	
@@ -49,6 +56,18 @@ public class Student {
 	}
 	public void setEmail(String email) {
 		this.email = Student.normalize(email);
+	}
+	public String getFirst() {
+		return first;
+	}
+	public void setFirst(String first) {
+		this.first =normalize(first);
+	}
+	public String getLast() {
+		return last;
+	}
+	public void setLast(String last) {
+		this.last = normalize(last);
 	}
 	public boolean getRegistered() {
 		return registered;
@@ -85,6 +104,13 @@ public class Student {
 	}
 	public void setAttendanceKey(String key) {
 		this.attendanceKey.add(key);
-	}	
+	}
+	public ArrayList<String> getCourses() {
+		return this.courses;
+	}
+	public void setCourses(ArrayList<String> courses) {
+		this.attendanceKey = courses;
+	}
+	
 	
 }

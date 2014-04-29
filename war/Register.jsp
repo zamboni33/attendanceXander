@@ -214,16 +214,50 @@
 		    }
 
 			Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
-							.filter("email", Student.normalize(user.getEmail()) );
+												.filter("email", Student.normalize(user.getEmail()) );
+			Query<Professor> queryProfessor = ObjectifyService.ofy().load().type(Professor.class)
+												.filter("email", Professor.normalize(user.getEmail()) );
 
-			for(Student student : queryStudent ) {
-				if(student.getAttendance() == true){
-					student.setLatitude((double) pageContext.getAttribute("userLatitude"));
-					student.setLatitude((double) pageContext.getAttribute("userLatitude"));
-				}
-			}	
+			if(queryStudent.count() > 0){
 		%>
+				<form action="/Register" method="post" onsubmit="return validateFormStudent()" name="registerForm">
+						<div>
+							<p>Student : Register</p>
+							<p>First Name:
+									<input 	id="first"	
+											name="first">
+							</p>
 
+							<p>Last Name:
+
+									<input 	id="last"
+											name="last">
+							</p>
+							
+								<input 	type="submit" 
+										name="registerClass" 
+										value="Submit">
+						</div>	
+				</form>
+				
+				<script>
+					function validateFormStudent()
+					{
+						var firstName=document.forms["registerForm"]["first"].value;
+						var lastName=document.forms["registerForm"]["last"].value;
+						if (firstName==null || firstName=="" 
+								|| lastName==null || lastName==""	)
+					 	{
+						  	alert("There are required fields that are not filled in.");
+						  	return false;
+					  	}
+					}
+					</script>
+			
+		<%	
+			}
+			else {
+		%>	
 				    Register a Class
 
 				    <form action="/Register" method="post" onsubmit="return validateForm()" name="registerForm">
@@ -338,7 +372,7 @@
 						</div>				    
 
 				    </form>
-
+	<% } // End of Professor Reg%> 
 					<script>
 					function validateForm()
 					{

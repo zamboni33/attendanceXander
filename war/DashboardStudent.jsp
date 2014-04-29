@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Collections" %>
 
 <%@ page import="com.google.appengine.api.users.User" %>
@@ -98,11 +99,7 @@
             <!-- /.navbar-header -->
             
             <ul class="nav navbar-top-links navbar-right">
-                
-                
-                
-                
-                
+                  
                 
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -168,10 +165,10 @@
 	  	}
 		
 	  	pageContext.setAttribute("stud_email",
-					actualStudent.getEmail());
+					actualStudent.getFirst());
 	  	%>
 	  		<blockquote>Hello, ${fn:escapeXml(stud_email)}!</blockquote>
-	    	<div id="chart_div" style="width: 900px; height: 500px;"></div>
+	    	
 	    	<%} %>
 
 				Student Dashboard
@@ -185,27 +182,62 @@
 
 				    <form action="/Locate" method="post" onsubmit="return validateForm()" name="locateForm">
 						<div>
-
-
 								<p>
-
 								<% 		
-											Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
+									Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
 										.filter("email", Student.normalize(user.getEmail() )); 
 
 										for(Student student : queryStudent ) {
+											if(student.getAttendance()){
+												%><p>Course name:<%	
+													
+													ObjectifyService.register(Course.class);
+													ObjectifyService.register(Professor.class);
+													ObjectifyService.register(Student.class);
+													
+													ArrayList<String> courses = student.getCourses();
+													for(String course : courses){    
+														if (courses.isEmpty()) {
+														%>
+														   <p>Courses are empty. Shouldn't ever happen. WTF!</p>
+														<%
+														} 
+													    else {
+														%>
+													        <select class="form-control" 
+													        		id="courseDropDown" 
+													        		name="courseDropDown"
+													        		onclick="haversine()" 
+													        		style="width: 500px">
+															<%
+															    	Query<Course> queryCourse = ObjectifyService.ofy().load().type(Course.class)
+																								.filter("classUnique", course);
+															    	
+															        for(Course pulledCourse : queryCourse){
+															        	pageContext.setAttribute("course_name", pulledCourse.getClassTitle());
+															        	pageContext.setAttribute("course_unique", pulledCourse.getClassUnique());
+// 															        	pageContext.setAttribute("course_lat", pulledCourse.getLatitude());
+// 															        	pageContext.setAttribute("course_lon", pulledCourse.getLongitude());
+																%>
+																        	<option value="${fn:escapeXml(course_unique)}"> 
+																        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
+																            		</option>
+																 <%
+															        }
+
+													    	}  // End of the else
+														}
+												}
+											%>	
+														    	</select>				    	
+										</p>
+											<%
 											if(student.getLatitude() != 0.0 
 													&& student.getLatitude() != 0.0){
-												%>
-												${fn:escapeXml("Your location is recorded!")}
-												<br>
-												<%
+												%>${fn:escapeXml("Your location is recorded!")}	<br><%
 											}
 											else{
-												%>
-												${fn:escapeXml("Your location is not currently recorded.")}
-												<br>
-												<%
+												%>${fn:escapeXml("Your location is not currently recorded.")}<br><%
 											}
 										}
 
@@ -217,7 +249,8 @@
 									}
 
 									function haversine(){
-										var lat2 = 42.741; 
+										var selectedanswer=document.getElementById("courseDropDown").selectedIndex;
+										var lat2 =  42.806911
 										var lon2 = -71.3161; 
 										var lat1 = 42.806911; 
 										var lon1 = -71.290611; 
@@ -299,7 +332,8 @@
 					    var calendarStart = year + '-' + month
 					    var today = year + '-' + month + '-' + day
 
-					       $(document).ready(function () {
+					    
+					    	$(document).ready(function () {
 					         $(".responsive-calendar").responsiveCalendar({
 					        	 time: calendarStart,
 

@@ -80,7 +80,7 @@ public class StopAttendanceServlet extends HttpServlet {
 										Student cron2 = new Student("Test 2", course.getDays().toString());
 										ofy().save().entities(cron2).now();
 			
-			if(course.getDays().contains(dayOfWeek)){
+//			if(course.getDays().contains(dayOfWeek)){
 				ArrayList<String> times = course.getTimes();
 				
 											Student cron3 = new Student("Test3", course.getTimes().toString());
@@ -133,6 +133,8 @@ public class StopAttendanceServlet extends HttpServlet {
 											ofy().save().entity(temp).now();
 											
 //											resp.getWriter().println(tempMap.toString());
+											resp.getWriter().println(student.getEmail());
+											resp.getWriter().println(distance.toString());
 											
 											Student cron9 = new Student("Test9", distance.toString());
 											ofy().save().entities(cron9).now();
@@ -152,6 +154,9 @@ public class StopAttendanceServlet extends HttpServlet {
 //											temp.assignAbsent(dateCalendar);										
 											temp.setAttendance(tempMap);
 											ofy().save().entities(temp).now();
+											
+											resp.getWriter().println(student.getEmail());
+											resp.getWriter().println(distance.toString());
 											
 //											dayTable.assignAbsent(dateCalendar);
 //											ofy().save().entities(dayTable).now();
@@ -187,7 +192,7 @@ public class StopAttendanceServlet extends HttpServlet {
 							
 						}
 //					}
-				}
+//				}
 			}
 		}
 		
