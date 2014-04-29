@@ -189,7 +189,7 @@
 
 										for(Student student : queryStudent ) {
 											if(student.getAttendance()){
-												%><p>Course name:<%	
+												%><p>Currently ${fn:escapeXml(course_name)} is live!<%	
 													
 													ObjectifyService.register(Course.class);
 													ObjectifyService.register(Professor.class);
@@ -214,15 +214,19 @@
 																								.filter("classUnique", course);
 															    	
 															        for(Course pulledCourse : queryCourse){
-															        	pageContext.setAttribute("course_name", pulledCourse.getClassTitle());
-															        	pageContext.setAttribute("course_unique", pulledCourse.getClassUnique());
-// 															        	pageContext.setAttribute("course_lat", pulledCourse.getLatitude());
-// 															        	pageContext.setAttribute("course_lon", pulledCourse.getLongitude());
-																%>
-																        	<option value="${fn:escapeXml(course_unique)}"> 
-																        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
-																            		</option>
-																 <%
+															        	ArrayList<String> times = pulledCourse.getTimes();
+															        	for(String time : times){
+																			String[] parts = time.split(":");
+//																			if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) == minuteOfDay){
+																	        	pageContext.setAttribute("course_name", pulledCourse.getClassTitle());
+																	        	pageContext.setAttribute("course_unique", pulledCourse.getClassUnique());
+																		%>
+																		        	<option value="${fn:escapeXml(course_unique)}"> 
+																		        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
+																		            		</option>
+																		 <%
+// 																			}
+																		}
 															        }
 
 													    	}  // End of the else
