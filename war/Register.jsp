@@ -27,6 +27,13 @@
 <!-- #map_canvas {display: none} -->
 <!-- </style> -->
  
+ <%
+	    	UserService userService = UserServiceFactory.getUserService();
+	    	User user = userService.getCurrentUser();
+
+		%> 
+ 
+ 
 	<script
     	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">
 	</script>
@@ -158,30 +165,34 @@
                 
                 
                 
+                <ul class="nav navbar-top-links navbar-right">
+                
+                
+                
+                
+                
+                
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                         
-  						<%
-  						    UserService userService = UserServiceFactory.getUserService();
-  						    User user = userService.getCurrentUser();
+						<%
 
- 						    if (user != null) {
- 						%>
- 								<li><a href="<%= userService.createLogoutURL("/") %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
- 						<%
- 							} 
+						    if (user != null) {
+						    	System.out.println(user);
+						%>
+								<li><a href="<%= userService.createLogoutURL("/") %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
+						<%
+							} 
 				    
- 						    else {
- 							%>
- 								<script type="text/javascript">
- 								window.location.href="/";
- 								</script>
- 						<%
- 						    }
- 						%>
+						    else {
+							%>
+								<li><a href="<%= userService.createLoginURL("/SignIn") %>"><i class="fa fa-sign-in fa-fw"></i> Sign In</a></li>
+						<%
+						    }
+						%>
                         
                         
                     </ul>
@@ -214,50 +225,16 @@
 		    }
 
 			Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
-												.filter("email", Student.normalize(user.getEmail()) );
-			Query<Professor> queryProfessor = ObjectifyService.ofy().load().type(Professor.class)
-												.filter("email", Professor.normalize(user.getEmail()) );
+							.filter("email", Student.normalize(user.getEmail()) );
 
-			if(queryStudent.count() > 0){
+			for(Student student : queryStudent ) {
+				if(student.getAttendance() == true){
+					student.setLatitude((double) pageContext.getAttribute("userLatitude"));
+					student.setLatitude((double) pageContext.getAttribute("userLatitude"));
+				}
+			}	
 		%>
-				<form action="/Register" method="post" onsubmit="return validateFormStudent()" name="registerForm">
-						<div>
-							<p>Student : Register</p>
-							<p>First Name:
-									<input 	id="first"	
-											name="first">
-							</p>
 
-							<p>Last Name:
-
-									<input 	id="last"
-											name="last">
-							</p>
-							
-								<input 	type="submit" 
-										name="registerClass" 
-										value="Submit">
-						</div>	
-				</form>
-				
-				<script>
-					function validateFormStudent()
-					{
-						var firstName=document.forms["registerForm"]["first"].value;
-						var lastName=document.forms["registerForm"]["last"].value;
-						if (firstName==null || firstName=="" 
-								|| lastName==null || lastName==""	)
-					 	{
-						  	alert("There are required fields that are not filled in.");
-						  	return false;
-					  	}
-					}
-					</script>
-			
-		<%	
-			}
-			else {
-		%>	
 				    Register a Class
 
 				    <form action="/Register" method="post" onsubmit="return validateForm()" name="registerForm">
@@ -372,7 +349,7 @@
 						</div>				    
 
 				    </form>
-	<% } // End of Professor Reg%> 
+
 					<script>
 					function validateForm()
 					{
@@ -476,10 +453,21 @@
 
 				</script>			
 
-<div class="footer">
-	Software Development 461L
-</div>
-
-
+    <!-- Core Scripts - Include with every page -->
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    
+    <!-- Page-Level Plugin Scripts - Dashboard -->
+    <script src="js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="js/plugins/morris/morris.js"></script>
+    
+    <!-- SB Admin Scripts - Include with every page -->
+    <script src="js/sb-admin.js"></script>
+    
+    <!-- Page-Level Demo Scripts - Dashboard - Use for reference -->
+    <script src="js/demo/dashboard-demo.js"></script>
+    
+    
   </body>
 </html>

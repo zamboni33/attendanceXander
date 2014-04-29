@@ -10,6 +10,9 @@
 
 
 <html><head></head><body style=""><meta charset="utf-8">
+
+<%		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser(); %>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
             
             <title>Report a bug - attendance.utexas.edu</title>
@@ -61,8 +64,6 @@
                     <ul class="dropdown-menu dropdown-user">
                         
 						<%
-						    UserService userService = UserServiceFactory.getUserService();
-						    User user = userService.getCurrentUser();
 						    if (user != null) {
 						    	System.out.println(user);
 						%>
@@ -104,7 +105,7 @@
 					<h3>Sorry, you are not in the database or there is a bug in the website. Please report your problem in the form below: </h3><br>
 					<h4>First Name:</h4>
 					<div>
-						<input name="first" rows="1" cols="60"></input>
+						<input name="first" rows="1" cols="60" value="<% if (user!=null) {user.getEmail();}%>"></input>
 					</div>
 					<h4>Last Name:</h4>
 					<div>
@@ -116,7 +117,7 @@
 					</div>
 					<h4>Describe the problem:<h4>
 					<div>
-						<input name="description" rows="5" cols="60"></input>
+						<textarea name="description" rows="40" cols="100"></textarea>
 					</div>
 		
 			<br>
