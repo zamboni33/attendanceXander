@@ -77,20 +77,20 @@ public class StopAttendanceServlet extends HttpServlet {
 		List<Course> courses = ObjectifyService.ofy().load().type(Course.class).list();	
 		for(Course course : courses ) {
 			
-										Student cron2 = new Student("Test 2", course.getDays().toString());
-										ofy().save().entities(cron2).now();
+//										Student cron2 = new Student("Test 2", course.getDays().toString());
+//										ofy().save().entities(cron2).now();
 			
 //			if(course.getDays().contains(dayOfWeek)){
 				ArrayList<String> times = course.getTimes();
 				
-											Student cron3 = new Student("Test3", course.getTimes().toString());
-											ofy().save().entities(cron3).now();
-											
-											Student cron4 = new Student("Test4", Integer.toString(hourOfDay));
-											ofy().save().entities(cron4).now();
-											
-											Student cron5 = new Student("Test5", Integer.toString(minuteOfDay));
-											ofy().save().entities(cron5).now();
+//											Student cron3 = new Student("Test3", course.getTimes().toString());
+//											ofy().save().entities(cron3).now();
+//											
+//											Student cron4 = new Student("Test4", Integer.toString(hourOfDay));
+//											ofy().save().entities(cron4).now();
+//											
+//											Student cron5 = new Student("Test5", Integer.toString(minuteOfDay));
+//											ofy().save().entities(cron5).now();
 				
 				for(String time : times){
 					String[] parts = time.split(":");
@@ -99,11 +99,11 @@ public class StopAttendanceServlet extends HttpServlet {
 						for(String studentEmail : theseStudents){
 							
 							
-							Student cron6 = new Student("Test6", studentEmail);
-							ofy().save().entities(cron6).now();
-							
-							Student cron7 = new Student("Test7", dateCalendar);
-							ofy().save().entities(cron7).now();
+//							Student cron6 = new Student("Test6", studentEmail);
+//							ofy().save().entities(cron6).now();
+//							
+//							Student cron7 = new Student("Test7", dateCalendar);
+//							ofy().save().entities(cron7).now();
 							
 							
 							Query<Student> students = ofy().load().type(Student.class).filter("email", studentEmail );
@@ -133,8 +133,8 @@ public class StopAttendanceServlet extends HttpServlet {
 //											resp.getWriter().println(student.getEmail());
 //											resp.getWriter().println(distance.toString());
 											
-											Student cron9 = new Student("Test9", distance.toString());
-											ofy().save().entities(cron9).now();
+//											Student cron9 = new Student("Test9", distance.toString());
+//											ofy().save().entities(cron9).now();
 											
 //											dayTable.assignPresent(dateCalendar);
 //											ofy().save().entities(dayTable).now();
@@ -163,8 +163,8 @@ public class StopAttendanceServlet extends HttpServlet {
 									Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
 									for(Attendance dayTable : attendance){
 										
-										Student cron8 = new Student("Test8", attendanceKey);
-										ofy().save().entities(cron8).now();
+//										Student cron8 = new Student("Test8", attendanceKey);
+//										ofy().save().entities(cron8).now();
 										
 										dayTable.assignPresent(dateCalendar);
 										ofy().save().entity(dayTable).now();

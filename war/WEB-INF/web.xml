@@ -103,12 +103,12 @@
     
 <!-- sendEmail -->
     <servlet>
-        <servlet-name>sendEmail</servlet-name>
-        <servlet-class>attendance.servlet.sendEmail</servlet-class>
+        <servlet-name>SendEmail</servlet-name>
+        <servlet-class>attendance.servlet.SendEmail</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>sendEmail</servlet-name>
-        <url-pattern>/sendEmail</url-pattern>
+        <servlet-name>SendEmail</servlet-name>
+        <url-pattern>/SendEmail</url-pattern>
     </servlet-mapping>  
     
 <!-- createUser -->

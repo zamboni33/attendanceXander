@@ -99,8 +99,7 @@
             <!-- /.navbar-header -->
             
             <ul class="nav navbar-top-links navbar-right">
-                  
-                
+                         
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -111,25 +110,17 @@
  						    if (user != null) {
  						%>
  								<li><a href="<%= userService.createLogoutURL("/") %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
- 						<%
- 							} 
-				    
- 						    else {
- 							%>
+ 						<%	} 
+ 						    else {	
+ 						 %>
  								<li><a href="<%= userService.createLoginURL("/SignIn") %>"><i class="fa fa-sign-in fa-fw"></i> Sign In</a></li>
- 						<%
- 						    }
- 						%>
-                        
-                        
+ 						<%  }	%>
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
                 <!-- /.dropdown -->
             </ul>
-            <!-- /.navbar-top-links -->
-            
-            
+            <!-- /.navbar-top-links -->  
             <!-- /.navbar-static-side -->
         </nav>
         
@@ -145,14 +136,11 @@
 		<script type="text/javascript">
 		window.onload = initializePosition();
 		</script>
-
 	  	<% 
-	  	
 	  	Student actualStudent = null;
 	  	if (students==null)
 		{
 			%>
-			
 			<script type="text/javascript">
 				window.location.href= 'SignIn';
 			</script>
@@ -171,45 +159,45 @@
 	    	
 	    	<%} %>
 
-				Student Dashboard
+	Student Dashboard
 
 
-				<input id="locationButton" 
-							type="button" 
-							onclick="initializePosition()" 
-							value="Establish Your Location">
+	<input id="locationButton" 
+				type="button" 
+				onclick="initializePosition()" 
+				value="Establish Your Location">
 
 
-				    <form action="/Locate" method="post" onsubmit="return validateForm()" name="locateForm">
-						<div>
-								<p>
-								<% 		
-									Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
-										.filter("email", Student.normalize(user.getEmail() )); 
+	    <form action="/Locate" method="post" onsubmit="return validateForm()" name="locateForm">
+			<div>
+					<p>
+					<% 		
+						Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
+							.filter("email", Student.normalize(user.getEmail() )); 
 
-										for(Student student : queryStudent ) {
-											if(student.getAttendance()){
-												%><p>Currently ${fn:escapeXml(course_name)} is live!<%	
-													
-													ObjectifyService.register(Course.class);
-													ObjectifyService.register(Professor.class);
-													ObjectifyService.register(Student.class);
-													
-													ArrayList<String> courses = student.getCourses();
-													for(String course : courses){    
-														if (courses.isEmpty()) {
-														%>
-														   <p>Courses are empty. Shouldn't ever happen. WTF!</p>
-														<%
-														} 
-													    else {
-														%>
-													        <select class="form-control" 
-													        		id="courseDropDown" 
-													        		name="courseDropDown"
-													        		onclick="haversine()" 
-													        		style="width: 500px">
-															<%
+							for(Student student : queryStudent ) {
+								if(student.getAttendance()){
+									%><p>Currently ${fn:escapeXml(course_name)} is live!<%	
+										
+										ObjectifyService.register(Course.class);
+										ObjectifyService.register(Professor.class);
+										ObjectifyService.register(Student.class);
+										
+										ArrayList<String> courses = student.getCourses();
+										for(String course : courses){    
+											if (courses.isEmpty()) {
+											%>
+											   <p>Courses are empty. Shouldn't ever happen. WTF!</p>
+											<%
+											} 
+										    else {
+											%>
+										        <select class="form-control" 
+										        		id="courseDropDown" 
+										        		name="courseDropDown"
+										        		onclick="haversine()" 
+										        		style="width: 500px">
+												<%
 															    	Query<Course> queryCourse = ObjectifyService.ofy().load().type(Course.class)
 																								.filter("classUnique", course);
 															    	
@@ -220,11 +208,13 @@
 //																			if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) == minuteOfDay){
 																	        	pageContext.setAttribute("course_name", pulledCourse.getClassTitle());
 																	        	pageContext.setAttribute("course_unique", pulledCourse.getClassUnique());
+																	        	pageContext.setAttribute("course_lat", pulledCourse.getLatitude());
+																	        	pageContext.setAttribute("course_lon", pulledCourse.getLongitude());
 																		%>
-																		        	<option value="${fn:escapeXml(course_unique)}"> 
-																		        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
-																		            		</option>
-																		 <%
+															        	<option value="${fn:escapeXml(course_unique)}"> 
+															        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
+															            		</option>
+															 <%
 // 																			}
 																		}
 															        }
@@ -233,31 +223,30 @@
 														}
 												}
 											%>	
-														    	</select>				    	
-										</p>
-											<%
-											if(student.getLatitude() != 0.0 
-													&& student.getLatitude() != 0.0){
-												%>${fn:escapeXml("Your location is recorded!")}	<br><%
-											}
-											else{
-												%>${fn:escapeXml("Your location is not currently recorded.")}<br><%
-											}
-										}
+											    	</select>				    	
+							</p>
+								<%
+								if(student.getLatitude() != 0.0 
+										&& student.getLatitude() != 0.0){
+									%>${fn:escapeXml("Your location is recorded!")}	<br><%
+								}
+								else{
+									%>${fn:escapeXml("Your location is not currently recorded.")}<br><%
+								}
+							}
 
-									%>
+						%>
 
-									<script>
+						<script>
 									Number.prototype.toRad = function() {
 									   return this * Math.PI / 180;
 									}
 
-									function haversine(){
-										var selectedanswer=document.getElementById("courseDropDown").selectedIndex;
-										var lat2 =  42.806911
-										var lon2 = -71.3161; 
-										var lat1 = 42.806911; 
-										var lon1 = -71.290611; 
+									function haversine(lat1, lon1){
+										var lat2 =  document.getElementById("course_lat");
+										var lon2 = document.getElementById("course_lon");
+// 										var lat1 = 42.806911; 
+// 										var lon1 = -71.290611; 
 
 										var R = 6371; // km 
 										//has a problem with the .toRad() method below.
@@ -269,30 +258,31 @@
 										                Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
 										                Math.sin(dLon/2) * Math.sin(dLon/2);  
 										var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-										var d = R * c; 
+										var d = R * c * 1000; 
+										return d;
 									}
 									</script>
 
 
-									Your Location:
+						Your Location:
 
-									<input 	id="latitude"
-											name="latitude"
-											type="number"
-											readonly>
+						<input 	id="latitude"
+								name="latitude"
+								type="number"
+								readonly>
 
-									<input 	id="longitude"
-											name="longitude"
-											type="number"
-											readonly>
-								</p>
+						<input 	id="longitude"
+								name="longitude"
+								type="number"
+								readonly>
+					</p>
 
-								<input 	type="submit" 
-										name="locateClass"
-										value="Submit">
-						</div>				    
+					<input 	type="submit" 
+							name="locateClass"
+							value="Submit">
+			</div>				    
 
-				    </form>
+	    </form>
 
 	<section>			    
 					<head>
@@ -380,6 +370,19 @@
 						  	alert("There are required fields that are not filled in.");
 						  	return false;
 					  	}
+						
+						var distance = haversine(latitude, longitude)
+						
+						if (distance > 100){
+							alert("Not close enough to class.");
+						}
+						
+						else{
+							alert("Worked");
+						}
+						
+						// TODO Check distance here and alert "Not close Enough"
+						
 					}
 					</script>
 

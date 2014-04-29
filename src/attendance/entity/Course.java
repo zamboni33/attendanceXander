@@ -37,6 +37,23 @@ public class Course {
 	}
 	
 	public Course(String roomNumber, String classTitle, String classUnique, 
+			ArrayList<Integer> days, ArrayList<String> times){
+
+
+		this.roomNumber = new String(roomNumber); 
+		this.classTitle = new String(classTitle);
+		this.classUnique = classUnique;
+		this.latitude = 0.0;
+		this.longitude = 0.0;
+		
+		this.professor = null;
+		
+		this.days = new ArrayList<Integer>(days);
+		this.times = new ArrayList<String>(times);
+		this.students = new ArrayList<String>();
+	}
+	
+	public Course(String roomNumber, String classTitle, String classUnique, 
 					ArrayList<Integer> days, ArrayList<String> times, ArrayList<String> students){
 		
 		
@@ -127,4 +144,11 @@ public class Course {
 	public void setStudents(ArrayList<String> students) {
 		this.students = students;
 	}
+	public void addStudent(String student){
+		if(this.students == null){
+			this.students = new ArrayList<String>();
+		}
+		this.students.add(student);
+	}
+	
 }

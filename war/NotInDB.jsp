@@ -5,11 +5,25 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<%@ page import="attendance.entity.Course" %>
+
+<%@ page import="com.googlecode.objectify.Objectify" %>
+<%@ page import="com.googlecode.objectify.ObjectifyService" %>
 
 
 
 
-<html><head></head><body style=""><meta charset="utf-8">
+
+<html><head>
+
+<%
+ObjectifyService.register(Course.class);
+%>
+
+</head>
+
+
+<body style=""><meta charset="utf-8">
 
 <%		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser(); %>
@@ -67,7 +81,7 @@
 						    if (user != null) {
 						    	System.out.println(user);
 						%>
-								<li><a href="<%= userService.createLogoutURL(request.getRequestURI()) %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
+								<li><a href="<%= userService.createLogoutURL("/") %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
 						<%
 							} 
 				    
@@ -105,7 +119,28 @@
 					<div>
 					<% pageContext.setAttribute("user_email",
 							(user!=null?user.getEmail():"")); %>
-						<input name="email" type="hidden" rows="1" cols="120" value="${fn:escapeXml(user_email)}"></input>
+						<input name="email" rows="1" cols="120" value="${fn:escapeXml(user_email)}" readonly></input>
+						<br>
+						<select class="form-control" 
+				        		id="courseDropDown" 
+				        		name="courseDropDown" 
+				        		style="width: 500px">
+						<%
+						List<Course> courses = ObjectifyService.ofy().load().type(Course.class).list();
+						    for(Course course : courses) {
+						        	pageContext.setAttribute("course_name", 
+						            		course.getClassTitle());
+						        	pageContext.setAttribute("course_unique", 
+						            		course.getClassUnique());
+						%>
+						        	<option value="${fn:escapeXml(course_unique)}"> 
+						        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
+						            		</option>
+						 <%
+							}
+						%>
+						</select>
+						
 					</div>
 		
 			<br>
@@ -113,20 +148,17 @@
 						<button type="submit" class="btn btn-primary" name="postButton">Register</button>
 					</div>
 			</form>
-			<form action="/sendEmail" method="post">
+			
+<!-- 			TODO VALIDATE THIS FORM -->
+			
+			
+			
+			<form action="/SendEmail" method="post">
 
 					<h3>If you already have an account, please report your problem in the form below: </h3><br>
-					<h4>First Name:</h4>
-					<div>
-						<input name="first" rows="1" cols="60"></input>
-					</div>
-					<h4>Last Name:</h4>
-					<div>
-						<input name="last" rows="1" cols="60"></input>
-					</div>
 					<h4>Email:</h4>
 					<div>
-						<input name="email" rows="1" cols="120"></input>
+						<input name="email" rows="1" cols="120" value="${fn:escapeXml(user_email)}"></input>
 					</div>
 					<h4>Describe the problem:<h4>
 					<div>

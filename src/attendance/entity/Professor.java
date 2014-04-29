@@ -19,7 +19,7 @@ public class Professor {
 	String first;
 	String last;
 	boolean registered;
-	List<String> students = null;
+	List<String> courses = null;
 
 	/** Use this method to normalize email addresses for lookup */
 	public static String normalize(String email) {
@@ -39,17 +39,27 @@ public class Professor {
 		this.first = null;
 		this.last = null;
 		this.registered = false;
-		this.students = null;		
+		this.courses = new ArrayList<String>();		
 	}
 	
-	public Professor (String email, ArrayList<String> students)
+	public Professor (String email)
 	{
 
 		this.email = normalize(email);
 		this.first = null;
 		this.last = null;
 		this.registered = false;
-		this.students = students;
+
+	}
+	
+	public Professor (String email, ArrayList<String> courses)
+	{
+
+		this.email = normalize(email);
+		this.first = null;
+		this.last = null;
+		this.registered = false;
+		this.courses = courses;
 
 	}	
 	
@@ -80,10 +90,10 @@ public class Professor {
 		this.registered = eval;
 	}
 	
-	public List<String> getStudents() {
-		return students;
+	public List<String> getcourses() {
+		return courses;
 	}
-	public void setStudents() {
+	public void setcourses() {
 		// TODO: Do nothing for the time being
 	}
 }

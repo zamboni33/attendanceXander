@@ -27,13 +27,6 @@
 <!-- #map_canvas {display: none} -->
 <!-- </style> -->
  
- <%
-	    	UserService userService = UserServiceFactory.getUserService();
-	    	User user = userService.getCurrentUser();
-
-		%> 
- 
- 
 	<script
     	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">
 	</script>
@@ -165,34 +158,30 @@
                 
                 
                 
-                <ul class="nav navbar-top-links navbar-right">
-                
-                
-                
-                
-                
-                
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                         
-						<%
+  						<%
+  						    UserService userService = UserServiceFactory.getUserService();
+  						    User user = userService.getCurrentUser();
 
-						    if (user != null) {
-						    	System.out.println(user);
-						%>
-								<li><a href="<%= userService.createLogoutURL("/") %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
-						<%
-							} 
+ 						    if (user != null) {
+ 						%>
+ 								<li><a href="<%= userService.createLogoutURL("/") %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
+ 						<%
+ 							} 
 				    
-						    else {
-							%>
-								<li><a href="<%= userService.createLoginURL("/SignIn") %>"><i class="fa fa-sign-in fa-fw"></i> Sign In</a></li>
-						<%
-						    }
-						%>
+ 						    else {
+ 							%>
+ 								<script type="text/javascript">
+ 								window.location.href="/";
+ 								</script>
+ 						<%
+ 						    }
+ 						%>
                         
                         
                     </ul>
@@ -225,16 +214,50 @@
 		    }
 
 			Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
-							.filter("email", Student.normalize(user.getEmail()) );
+												.filter("email", Student.normalize(user.getEmail()) );
+			Query<Professor> queryProfessor = ObjectifyService.ofy().load().type(Professor.class)
+												.filter("email", Professor.normalize(user.getEmail()) );
 
-			for(Student student : queryStudent ) {
-				if(student.getAttendance() == true){
-					student.setLatitude((double) pageContext.getAttribute("userLatitude"));
-					student.setLatitude((double) pageContext.getAttribute("userLatitude"));
-				}
-			}	
+			if(queryStudent.count() > 0){
 		%>
+				<form action="/Register" method="post" onsubmit="return validateFormStudent()" name="registerForm">
+						<div>
+							<p>Student : Register</p>
+							<p>First Name:
+									<input 	id="first"	
+											name="first">
+							</p>
 
+							<p>Last Name:
+
+									<input 	id="last"
+											name="last">
+							</p>
+							
+								<input 	type="submit" 
+										name="registerClass" 
+										value="Submit">
+						</div>	
+				</form>
+				
+				<script>
+					function validateFormStudent()
+					{
+						var firstName=document.forms["registerForm"]["first"].value;
+						var lastName=document.forms["registerForm"]["last"].value;
+						if (firstName==null || firstName=="" 
+								|| lastName==null || lastName==""	)
+					 	{
+						  	alert("There are required fields that are not filled in.");
+						  	return false;
+					  	}
+					}
+					</script>
+			
+		<%	
+			}
+			else {
+		%>	
 				    Register a Class
 
 				    <form action="/Register" method="post" onsubmit="return validateForm()" name="registerForm">
@@ -292,35 +315,8 @@
 								    	</select>	
 								</p>
 
-								<p>Students:
-									<%
-										Professor thisProfessor = null;
-										for(Professor professor : professors){
-											if (professor.getEmail().equals (user.getEmail().toLowerCase()) ){
-												thisProfessor = professor;
-												break;
-											}
-										}
-									List<String> students = thisProfessor.getStudents();
+								
 
-									%>
-
-								<SELECT NAME="studentList" SIZE="10" MULTIPLE >
-
-									<%
-													for (String student : students) {
-														pageContext.setAttribute("student_name", 
-											            		student);
-												 %>
-												        	<option value="${fn:escapeXml(student_name)}"> 
-												        					${fn:escapeXml(student_name)}
-												            		</option>
-												 <%
-
-												    }				
-												 %>	
-								</SELECT>
-								</p>
 
 								<p>Course Location:
 
@@ -349,7 +345,7 @@
 						</div>				    
 
 				    </form>
-
+	<% } // End of Professor Reg%> 
 					<script>
 					function validateForm()
 					{
@@ -453,7 +449,7 @@
 
 				</script>			
 
-    <!-- Core Scripts - Include with every page -->
+   <!-- Core Scripts - Include with every page -->
     <script src="js/jquery-1.10.2.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
@@ -467,7 +463,7 @@
     
     <!-- Page-Level Demo Scripts - Dashboard - Use for reference -->
     <script src="js/demo/dashboard-demo.js"></script>
-    
-    
+
+
   </body>
 </html>

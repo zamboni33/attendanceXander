@@ -18,7 +18,7 @@
 
 		<h4>Email:</h4>
 		<div>
-			<input name="email" rows="1" cols="60"></input>
+			<input name="email" rows="1" cols="60" value="c.julien@mail.utexas.edu" readonly></input>
 		</div>
 
 <br>

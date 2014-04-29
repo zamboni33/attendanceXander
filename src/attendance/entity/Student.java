@@ -15,7 +15,6 @@ public class Student {
 	String first;
 	String last;
 	boolean registered;
-	int courseCount;
 	boolean recordLocation;
 	double latitude;
 	double longitude;
