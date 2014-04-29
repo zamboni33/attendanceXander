@@ -12,7 +12,7 @@
 <html><head></head><body style=""><meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
             
-            <title>Start Bootstrap - SB Admin Version 2.0 Demo</title>
+            <title>UT Attendance</title>
             
             <!-- Core CSS - Include with every page -->
             <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -95,7 +95,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Welcome to attendance.utexas.edu</h1>
+                    <h1 class="page-header">Please to sign in with your UT email address.</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
