@@ -120,13 +120,16 @@ public class StopAttendanceServlet extends HttpServlet {
 															student.getLatitude(), student.getLongitude()));
 							
 									
-									if(distance < 500){
+									if(distance < 100){
 										String attendanceKey = new String(course.getClassUnique() + student.getEmail());
 										Query<Attendance> attendance = ofy().load().type(Attendance.class).filter("attendanceKey", attendanceKey );
 										for(Attendance dayTable : attendance){
 											
 											dayTable.assignPresent(dateCalendar);
 											ofy().save().entity(dayTable).now();
+											
+											student.setDistance(distance);
+											ofy().save().entities(student).now();
 											
 //											resp.getWriter().println(dateCalendar);
 //											resp.getWriter().println(dayTable.getAttendance().toString());
@@ -147,6 +150,9 @@ public class StopAttendanceServlet extends HttpServlet {
 											
 											dayTable.assignPresent(dateCalendar);
 											ofy().save().entity(dayTable).now();
+											
+											student.setDistance(distance);
+											ofy().save().entities(student).now();
 											
 //											resp.getWriter().println(dateCalendar);
 //											resp.getWriter().println(dayTable.getAttendance().toString());

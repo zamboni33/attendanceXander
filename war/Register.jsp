@@ -258,6 +258,8 @@
 			}
 			else {
 		%>	
+		
+		<div>
 				    Register a Class
 
 				    <form action="/Register" method="post" onsubmit="return validateForm()" name="registerForm">
@@ -345,6 +347,20 @@
 						</div>				    
 
 				    </form>
+				    
+			<input 		id="mapButton" 
+						name="mapButton" 
+						type="button" 
+						onclick="displayMap()" 
+						value = "Show Map">
+
+			<input 		id="locationButton" 
+						type="button" 
+						onclick="initializePosition()" 
+						value="Use Current Location">
+				    
+	</div>	    
+				    
 	<% } // End of Professor Reg%> 
 					<script>
 					function validateForm()
@@ -364,36 +380,24 @@
 					}
 					</script>
 
+<!-- 			<form action="/SaveClassroom" method="post" name="classroomForm"> -->
+<!-- 					<input 	id="classroomName" -->
+<!-- 							name="classroomName"> -->
 
-			<input 		id="mapButton" 
-						name="mapButton" 
-						type="button" 
-						onclick="displayMap()" 
-						value = "Show Map">
+<!-- 					<input 	id="classroomLat" -->
+<!-- 							name="classroomLat" -->
+<!-- 							type="number" -->
+<!-- 							readonly> -->
 
-			<input 		id="locationButton" 
-						type="button" 
-						onclick="initializePosition()" 
-						value="Use Current Location">
+<!-- 					<input 	id="classroomLon" -->
+<!-- 							name="classroomLon" -->
+<!-- 							type="number" -->
+<!-- 							readonly> -->
 
-			<form action="/SaveClassroom" method="post" name="classroomForm">
-					<input 	id="classroomName"
-							name="classroomName">
-
-					<input 	id="classroomLat"
-							name="classroomLat"
-							type="number"
-							readonly>
-
-					<input 	id="classroomLon"
-							name="classroomLon"
-							type="number"
-							readonly>
-
-			<input		id="SubmitClassroom"
-						type="submit"
-						value="Submit Classroom">
-			</form>
+<!-- 			<input		id="SubmitClassroom" -->
+<!-- 						type="submit" -->
+<!-- 						value="Submit Classroom"> -->
+<!-- 			</form> -->
 			
 	</div>
 

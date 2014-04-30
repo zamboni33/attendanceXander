@@ -310,7 +310,18 @@
 							</div>
 					<!-- 	Responsive calendar - END -->
 
+		<%
+		Query<Student> queryStudent2 = ObjectifyService.ofy().load().type(Student.class)
+										.filter("email", Student.normalize(user.getEmail() )); 
 
+		for(Student student : queryStudent2 ) {	
+		
+			if(student.getLatitude() != 0.0 
+					&& student.getLatitude() != 0.0){	
+				
+			%>	
+			
+			
 					    <script src="../js/jquery.js"></script>
 					    <script src="../js/bootstrap.min.js"></script>
 					    <script src="../js/responsive-calendar.js"></script>
@@ -340,13 +351,57 @@
 					             "2014-04-01": {"absentPresent": 1},
 					             "2014-04-03": {"absentPresent": 0},
 					             "2014-04-08": {"absentPresent": 1},
-					             "2014-04-10": {"absentPresent": 0}
+					             "2014-04-30": {"absentPresent": 0}
 
 					           }
 					         });
 					       });
 					     </script>
+				<%	     
+			} else {
+				%>
+						
+			
+					    <script src="../js/jquery.js"></script>
+					    <script src="../js/bootstrap.min.js"></script>
+					    <script src="../js/responsive-calendar.js"></script>
+					    <script type="text/javascript">
 
+					    // Get me the current date
+					    var currentTime = new Date()
+					    var day = currentTime.getDate()
+					    if(day < 10) { day = '0'+ day } 
+					    var month = currentTime.getMonth() + 1
+					    if(month < 10) {month = '0'+ month} 
+					    var year = currentTime.getFullYear()
+					    var calendarStart = year + '-' + month
+					    var today = year + '-' + month + '-' + day
+
+					    
+					    	$(document).ready(function () {
+					         $(".responsive-calendar").responsiveCalendar({
+					        	 time: calendarStart,
+
+					        	 events: {
+					    		 today : {"today": 1},
+					         	 "2014-03-30": {"absentPresent": 1},
+					             "2014-03-26": {"absentPresent": 0}, 
+					             "2014-03-03":{"number": 1, "absentPresent": 1, "url": "http://w3widgets.com"}, 
+					             "2014-03-12": {"absentPresent": 0},
+					             "2014-04-01": {"absentPresent": 1},
+					             "2014-04-03": {"absentPresent": 0},
+					             "2014-04-08": {"absentPresent": 1},
+					             "2014-04-30": {"absentPresent": 0}
+
+					           }
+					         });
+					       });
+					     </script>	
+				<%
+				
+			}
+		}
+				%>
 					</section>	
 
 

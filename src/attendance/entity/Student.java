@@ -18,6 +18,7 @@ public class Student {
 	boolean recordLocation;
 	double latitude;
 	double longitude;
+	double distance;
 	ArrayList<String> attendanceKey;
 	ArrayList<String> courses;
 	
@@ -42,6 +43,7 @@ public class Student {
 		this.recordLocation = false;
 		this.latitude = 0.0;
 		this.longitude = 0.0;
+		this.distance = 0.0;
 		String temp = new String(course + email);
 		this.attendanceKey = new ArrayList<String>();
 		this.attendanceKey.add(temp);
@@ -97,6 +99,12 @@ public class Student {
 	}
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+	public double getDistance() {
+		return this.distance;
+	}
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 	public ArrayList<String> getAttendanceKey() {
 		return this.attendanceKey;

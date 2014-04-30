@@ -81,12 +81,13 @@ public class StartAttendanceServlet extends HttpServlet {
 				for(String time : times){
 					String[] parts = time.split(":");
 //					if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) == minuteOfDay){
+						
 						ArrayList<String> theseStudents = course.getStudents();
 						for(String studentEmail : theseStudents){
 							
 							
-							Student cron6 = new Student("Test6", studentEmail);
-							ofy().save().entities(cron6).now();
+//							Student cron6 = new Student("Test6", studentEmail);
+//							ofy().save().entities(cron6).now();
 							
 							
 							Query<Student> students = ofy().load().type(Student.class).filter("email", studentEmail );

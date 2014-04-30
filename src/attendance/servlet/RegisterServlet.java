@@ -81,6 +81,8 @@ public class RegisterServlet extends HttpServlet {
 				thisCourse = course;
 			}
 			thisCourse.setProfessor(Professor.normalize(user.getEmail()));
+			thisCourse.setLatitude(Double.parseDouble(req.getParameter("latitude")));
+			thisCourse.setLongitude(Double.parseDouble(req.getParameter("longitude")));
 			ofy().save().entities(thisCourse).now();
 			
 			// Update Professor Entity
