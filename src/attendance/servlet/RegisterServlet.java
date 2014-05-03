@@ -98,6 +98,7 @@ public class RegisterServlet extends HttpServlet {
 			thisProfessor.setFirst(req.getParameter("first"));
 			thisProfessor.setLast(req.getParameter("last"));
 			thisProfessor.setRegistered(true);
+			thisProfessor.getCourses().add(req.getParameter("courseDropDown"));
 			ofy().save().entities(thisProfessor).now();
 
 			

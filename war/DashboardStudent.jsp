@@ -98,6 +98,63 @@
             </div>
             <!-- /.navbar-header -->
             
+	<div class="navbar-default navbar-static-side" role="navigation">
+		<div class="sidebar-collapse">
+			<ul class="nav" id="side-menu">
+				<li class="sidebar-search">
+					<div class="input-group custom-search-form">
+						<input type="text" class="form-control" placeholder="Search...">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button">
+								<i class="fa fa-search"></i>
+							</button>
+						</span>
+					</div> <!-- /input-group -->
+				</li>
+				<li><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>
+						Courses<span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+					<% 
+					
+					ObjectifyService.register(Course.class);
+					ObjectifyService.register(Professor.class);
+					ObjectifyService.register(Student.class);
+					
+				  	Student thisStudent = null;
+					
+					for (Student s : students)
+				  	{
+						thisStudent = s;
+				  	}
+					
+				  	pageContext.setAttribute("stud_email",
+				  			thisStudent.getFirst());
+					
+					ArrayList<String> coursesMenu = thisStudent.getCourses();
+					
+					
+					for (String course : coursesMenu) 
+					{
+				    	Query<Course> queryCourse = ObjectifyService.ofy().load().type(Course.class)
+								.filter("classUnique", course);
+						for(Course thisCourseMenu : queryCourse){
+							pageContext.setAttribute("course_name_menu", thisCourseMenu.getClassTitle());
+							pageContext.setAttribute("course_unique_menu", thisCourseMenu.getClassUnique());
+						}
+					%>
+						<li><a href="DashboardStudent.jsp?class=${fn:escapeXml(course_unique_menu)}">${fn:escapeXml(course_name_menu)}</a></li>
+					<% } %>
+					</ul> <!-- /.nav-second-level --></li>
+			</ul>
+			<!-- /#side-menu -->
+		</div>
+		<!-- /.sidebar-collapse -->
+	</div>
+	<!-- /.navbar-static-side -->            
+            
+            
+            
+            
             <ul class="nav navbar-top-links navbar-right">
                          
                 <li class="dropdown">
@@ -158,6 +215,8 @@
 	  		<blockquote>Hello, ${fn:escapeXml(stud_email)}!</blockquote>
 	    	
 	    	<%} %>
+	    	
+	    	
 
 	Student Dashboard
 
@@ -170,61 +229,61 @@
 
 	    <form action="/Locate" method="post" onsubmit="return validateForm()" name="locateForm">
 			<div>
-					<p>
-					<% 		
-						Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
-							.filter("email", Student.normalize(user.getEmail() )); 
+			<p>
+			<% 		
+				Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
+					.filter("email", Student.normalize(user.getEmail() )); 
 
-							for(Student student : queryStudent ) {
-								if(student.getAttendance()){
-									%><p>Currently ${fn:escapeXml(course_name)} is live!<%	
-										
-										ObjectifyService.register(Course.class);
-										ObjectifyService.register(Professor.class);
-										ObjectifyService.register(Student.class);
-										
-										ArrayList<String> courses = student.getCourses();
-										for(String course : courses){    
-											if (courses.isEmpty()) {
-											%>
-											   <p>Courses are empty. Shouldn't ever happen. WTF!</p>
-											<%
-											} 
-										    else {
-											%>
-										        <select class="form-control" 
-										        		id="courseDropDown" 
-										        		name="courseDropDown"
-										        		onclick="haversine()" 
-										        		style="width: 500px">
-												<%
-															    	Query<Course> queryCourse = ObjectifyService.ofy().load().type(Course.class)
-																								.filter("classUnique", course);
-															    	
-															        for(Course pulledCourse : queryCourse){
-															        	ArrayList<String> times = pulledCourse.getTimes();
-															        	for(String time : times){
-																			String[] parts = time.split(":");
-//																			if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) == minuteOfDay){
-																	        	pageContext.setAttribute("course_name", pulledCourse.getClassTitle());
-																	        	pageContext.setAttribute("course_unique", pulledCourse.getClassUnique());
-																	        	pageContext.setAttribute("course_lat", pulledCourse.getLatitude());
-																	        	pageContext.setAttribute("course_lon", pulledCourse.getLongitude());
-																		%>
-															        	<option value="${fn:escapeXml(course_unique)}"> 
-															        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
-															            		</option>
-															 <%
-// 																			}
+					for(Student student : queryStudent ) {
+						if(student.getAttendance()){
+							%><p>Currently ${fn:escapeXml(course_name)} is live!<%	
+								
+								ObjectifyService.register(Course.class);
+								ObjectifyService.register(Professor.class);
+								ObjectifyService.register(Student.class);
+								
+								ArrayList<String> courses = student.getCourses();
+								for(String course : courses){    
+									if (courses.isEmpty()) {
+									%>
+									   <p>Courses are empty. Shouldn't ever happen. WTF!</p>
+									<%
+									} 
+								    else {
+									%>
+								        <select class="form-control" 
+								        		id="courseDropDown" 
+								        		name="courseDropDown"
+								        		onclick="haversine()" 
+								        		style="width: 500px">
+										<%
+									    	Query<Course> queryCourse = ObjectifyService.ofy().load().type(Course.class)
+																		.filter("classUnique", course);
+									    	
+										        for(Course pulledCourse : queryCourse){
+										        	ArrayList<String> times = pulledCourse.getTimes();
+										        	for(String time : times){
+													String[] parts = time.split(":");
+// 													if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) == minuteOfDay){
+											        	pageContext.setAttribute("course_name", pulledCourse.getClassTitle());
+											        	pageContext.setAttribute("course_unique", pulledCourse.getClassUnique());
+											        	pageContext.setAttribute("course_lat", pulledCourse.getLatitude());
+											        	pageContext.setAttribute("course_lon", pulledCourse.getLongitude());
+										%>
+													        	<option value="${fn:escapeXml(course_unique)}"> 
+													        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
+													            		</option>
+													 <%
+																			}
 																		}
 															        }
 
 													    	}  // End of the else
-														}
+// 														}
 												}
 											%>	
-											    	</select>				    	
-							</p>
+									    	</select>				    	
+					</p>
 								<%
 								if(student.getLatitude() != 0.0 
 										&& student.getLatitude() != 0.0){

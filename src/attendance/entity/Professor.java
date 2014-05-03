@@ -2,8 +2,6 @@
 package attendance.entity;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Entity;
@@ -19,7 +17,7 @@ public class Professor {
 	String first;
 	String last;
 	boolean registered;
-	List<String> courses = null;
+	ArrayList<String> courses = null;
 
 	/** Use this method to normalize email addresses for lookup */
 	public static String normalize(String email) {
@@ -90,7 +88,7 @@ public class Professor {
 		this.registered = eval;
 	}
 	
-	public List<String> getcourses() {
+	public ArrayList<String> getCourses() {
 		return courses;
 	}
 	public void setcourses() {

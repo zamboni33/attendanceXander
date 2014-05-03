@@ -77,6 +77,8 @@ public class InitServlet extends HttpServlet {
 				ofy().save().entities(newProfessor3).now();	
 				Professor newProfessor4 = new Professor ("a.balette@gmail.com");
 				ofy().save().entities(newProfessor4).now();
+				Professor newProfessor5 = new Professor ("c.julien@utexas.edu");
+				ofy().save().entities(newProfessor5).now();
 				
 				ArrayList<Integer> days = new ArrayList<Integer>();
 				days.add(2);

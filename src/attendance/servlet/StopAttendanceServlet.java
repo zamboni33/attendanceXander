@@ -5,7 +5,6 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 import java.io.IOException;
 import java.lang.Math;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.TimeZone;
@@ -80,7 +79,7 @@ public class StopAttendanceServlet extends HttpServlet {
 //										Student cron2 = new Student("Test 2", course.getDays().toString());
 //										ofy().save().entities(cron2).now();
 			
-//			if(course.getDays().contains(dayOfWeek)){
+			if(course.getDays().contains(dayOfWeek)){
 				ArrayList<String> times = course.getTimes();
 				
 //											Student cron3 = new Student("Test3", course.getTimes().toString());
@@ -94,7 +93,7 @@ public class StopAttendanceServlet extends HttpServlet {
 				
 				for(String time : times){
 					String[] parts = time.split(":");
-//					if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) + 15 == minuteOfDay){
+					if(Integer.parseInt(parts[0]) == hourOfDay && Integer.parseInt(parts[1]) + 15 == minuteOfDay){
 						ArrayList<String> theseStudents = course.getStudents();
 						for(String studentEmail : theseStudents){
 							
@@ -188,8 +187,8 @@ public class StopAttendanceServlet extends HttpServlet {
 							}
 							
 						}
-//					}
-//				}
+					}
+				}
 			}
 		}
 		

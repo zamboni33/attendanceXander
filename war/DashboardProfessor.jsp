@@ -4,9 +4,11 @@
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="java.util.Collections" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="com.googlecode.objectify.ObjectifyService" %>
 <%@ page import="com.googlecode.objectify.cmd.Query" %>
 <%@ page import="attendance.entity.Professor" %>
+<%@ page import="attendance.entity.Course" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 
@@ -98,7 +100,58 @@
                 
                 
                 
-                
+	<div class="navbar-default navbar-static-side" role="navigation">
+		<div class="sidebar-collapse">
+			<ul class="nav" id="side-menu">
+				<li class="sidebar-search">
+					<div class="input-group custom-search-form">
+						<input type="text" class="form-control" placeholder="Search...">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button">
+								<i class="fa fa-search"></i>
+							</button>
+						</span>
+					</div> <!-- /input-group -->
+				</li>
+				<li><a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>
+						Courses<span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+					<% 
+					
+					ObjectifyService.register(Course.class);
+					ObjectifyService.register(Professor.class);
+					
+				  	Professor thisProfessor = null;
+					
+					for (Professor p : professors)
+				  	{
+						thisProfessor = p;
+				  	}
+					
+				  	pageContext.setAttribute("stud_email",
+				  			thisProfessor.getFirst());
+					
+					ArrayList<String> coursesMenu = thisProfessor.getCourses();
+					
+					
+					for (String course : coursesMenu) 
+					{
+				    	Query<Course> queryCourse = ObjectifyService.ofy().load().type(Course.class)
+								.filter("classUnique", course);
+						for(Course thisCourseMenu : queryCourse){
+							pageContext.setAttribute("course_name_menu", thisCourseMenu.getClassTitle());
+							pageContext.setAttribute("course_unique_menu", thisCourseMenu.getClassUnique());
+						}
+					%>
+						<li><a href="DashboardStudent.jsp?class=${fn:escapeXml(course_unique_menu)}">${fn:escapeXml(course_name_menu)}</a></li>
+					<% } %>
+					</ul> <!-- /.nav-second-level --></li>
+			</ul>
+			<!-- /#side-menu -->
+		</div>
+		<!-- /.sidebar-collapse -->
+	</div>
+	<!-- /.navbar-static-side -->                    
                 
                 
                 <li class="dropdown">
