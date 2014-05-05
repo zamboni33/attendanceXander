@@ -62,5 +62,9 @@ public class Attendance {
 		Set<String> keySet = this.attendance.keySet();
 		List<String> keys = new ArrayList<String>(keySet);
 		return (keys);
-	}		
+	}
+	public HashMap<String, Boolean> getMap () {
+		return (this.attendance);
+	}	
+	
 }

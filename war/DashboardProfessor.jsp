@@ -57,6 +57,65 @@
 										.filter("email", Professor.normalize(user.getEmail()) );
 	    	}
 		%> 
+		
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script>
+		window.onload=function(){
+			var url=document.URL;
+			var email=document.userEmail;
+//				alert(url);
+ 			var classParam=parseURLParams(url);
+ 			if(classParam == null){
+//	 				alert("Nothing to report.");
+ 			}
+ 			else{
+ 				var test = 4;
+ 				alert(classParam);
+ 			    $.get( url:"/GrabData", 
+ 			   			{classParam: classParam, email: email},
+ 			   		// Do something with data
+ 			   		for (var key in data) {
+ 			   			if (data.hasOwnProperty(key)) {
+ 			   				$(“.result”).append(key + “: “ + data[key] + “<br/>”);
+ 			   			}
+ 			   		}
+ 			   	}, “json”);
+ 			}
+		}
+		
+			function parseURLParams(url) {
+			    var queryStart = url.indexOf("?") + 1,
+			        queryEnd   = url.length + 1,
+			        query = url.slice(queryStart, queryEnd - 1),
+			        
+			        pairs = query.replace(/\+/g, " ").split("&"),
+			        parms = {}, i, n, v, nv;
+			    	
+// 			    var course[];
+			    
+			    if (query === url || query === "") {
+			        return;
+			    }
+			
+			    for (i = 0; i < pairs.length; i++) {
+			        nv = pairs[i].split("=");
+			        n = decodeURIComponent(nv[0]);
+			        v = decodeURIComponent(nv[1]);
+			        
+// 			        course.push(v);
+			
+// 			        if (!parms.hasOwnProperty(n)) {
+// 			            parms[n] = [];
+// 			        }
+			
+// 			        parms[n].push(nv.length === 2 ? v : null);
+			    }
+			    return v;
+			}
+			</script>     
+		
+		
+		
 	</head>
 	<body style=""><meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,23 +143,7 @@
     
     <div id="wrapper">
         
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="AttendanceXander.jsp">attendance.utexas.edu</a>
-            </div>
-            <!-- /.navbar-header -->
-            
-            <ul class="nav navbar-top-links navbar-right">
-                
-                
-                
-	<div class="navbar-default navbar-static-side" role="navigation">
+        <div class="navbar-default navbar-static-side" role="navigation">
 		<div class="sidebar-collapse">
 			<ul class="nav" id="side-menu">
 				<li class="sidebar-search">
@@ -143,7 +186,7 @@
 							pageContext.setAttribute("course_unique_menu", thisCourseMenu.getClassUnique());
 						}
 					%>
-						<li><a href="DashboardStudent.jsp?class=${fn:escapeXml(course_unique_menu)}">${fn:escapeXml(course_name_menu)}</a></li>
+						<li><a href="DashboardProfessor.jsp?class=${fn:escapeXml(course_unique_menu)}">${fn:escapeXml(course_name_menu)}</a></li>
 					<% } %>
 					</ul> <!-- /.nav-second-level --></li>
 			</ul>
@@ -151,7 +194,22 @@
 		</div>
 		<!-- /.sidebar-collapse -->
 	</div>
-	<!-- /.navbar-static-side -->                    
+	<!-- /.navbar-static-side -->    
+        
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="AttendanceXander.jsp">attendance.utexas.edu</a>
+            </div>
+            <!-- /.navbar-header -->
+            
+            <ul class="nav navbar-top-links navbar-right">
+                          
                 
                 
                 <li class="dropdown">

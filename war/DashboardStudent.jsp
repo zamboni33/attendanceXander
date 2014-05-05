@@ -23,7 +23,7 @@
 
 
 <html>
-	<head>
+	<head>  
  
 		<%
 	    	UserService userService = UserServiceFactory.getUserService();
@@ -78,6 +78,53 @@
                             
 		<!-- Page-Level Plugin CSS - Buttons -->
 		<link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
+		
+				<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script>
+		window.onload=function(){
+			var url=document.URL;
+			var email=document.userEmail;
+//				alert(url);
+ 			var classParam=parseURLParams(url);
+ 			if(classParam == null){
+//	 				alert("Nothing to report.");
+ 			}
+ 			else{
+ 				var test = 4;
+ 				alert(classParam);
+ 			    $.get( url:"/GrabData", 
+ 			   			{classParam: classParam, email: email},
+ 			   		// Do something with data
+ 			   		for (var key in data) {
+ 			   			if (data.hasOwnProperty(key)) {
+ 			   				$(“.result”).append(key + “: “ + data[key] + “<br/>”);
+ 			   			}
+ 			   		}
+ 			   	}, “json”);
+ 			}
+		}
+
+		
+			function parseURLParams(url) {
+			    var queryStart = url.indexOf("?") + 1,
+			        queryEnd   = url.length + 1,
+			        query = url.slice(queryStart, queryEnd - 1),
+			        
+			        pairs = query.replace(/\+/g, " ").split("&"),
+			        parms = {}, i, n, v, nv;
+			    
+			    if (query === url || query === "") {
+			        return;
+			    }
+			
+			    for (i = 0; i < pairs.length; i++) {
+			        nv = pairs[i].split("=");
+			        n = decodeURIComponent(nv[0]);
+			        v = decodeURIComponent(nv[1]);
+			    }
+			    return v;
+			}
+			</script>   
 
 	</head>                                
 
