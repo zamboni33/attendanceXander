@@ -41,7 +41,7 @@
 		    </script>
 		<%
 	    	UserService userService = UserServiceFactory.getUserService();
-	    	User user = userService.getCurrentUser();
+	    	User user = userService.getCurrentUser(); 
 	    	Query<Professor> professors = null;
 	    	if (user==null)
 	    	{
@@ -60,29 +60,31 @@
 		
 		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script>
-		window.onload=function(){
+		$(document).ready(function() {
 			var url=document.URL;
-			var email=document.userEmail;
-//				alert(url);
+			var email = "<%= Professor.normalize(user.getEmail()) %>";
+// 				alert(email);
  			var classParam=parseURLParams(url);
  			if(classParam == null){
 //	 				alert("Nothing to report.");
  			}
  			else{
- 				var test = 4;
- 				alert(classParam);
- 			    $.get( url:"/GrabData", 
- 			   			{classParam: classParam, email: email},
+//  				alert(classParam);
+ 			    $.get( "/GrabData", 
+ 			   			{classParam: classParam, email: email}, function (data) {
  			   		// Do something with data
+ 			   		alert(data);
  			   		for (var key in data) {
- 			   			if (data.hasOwnProperty(key)) {
- 			   				$(“.result”).append(key + “: “ + data[key] + “<br/>”);
- 			   			}
+//  			   			if (data.hasOwnProperty(key)) {
+//  			   				$(“.result”).append(key + “: “ + data[key] + “<br/>”);
+//  			   			}
  			   		}
- 			   	}, “json”);
+ 			   	}, "json");
  			}
-		}
+		} );
+		</script>
 		
+		<script type="text/javascript">
 			function parseURLParams(url) {
 			    var queryStart = url.indexOf("?") + 1,
 			        queryEnd   = url.length + 1,
@@ -302,7 +304,7 @@
     <script src="js/sb-admin.js"></script>
     
     <!-- Page-Level Demo Scripts - Dashboard - Use for reference -->
-    <script src="js/demo/dashboard-demo.js"></script>
+<!--     <script src="js/demo/dashboard-demo.js"></script> -->
     
     
     

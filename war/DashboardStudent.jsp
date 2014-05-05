@@ -93,7 +93,7 @@
  				var test = 4;
  				alert(classParam);
  			    $.get( url:"/GrabData", 
- 			   			{classParam: classParam, email: email},
+ 			   			{classParam: classParam, email: email}, function (data) {
  			   		// Do something with data
  			   		for (var key in data) {
  			   			if (data.hasOwnProperty(key)) {

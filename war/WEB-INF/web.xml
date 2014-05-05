@@ -121,6 +121,16 @@
         <url-pattern>/createUser</url-pattern>
     </servlet-mapping>  
     
+<!-- GrabData -->
+    <servlet>
+        <servlet-name>GrabData</servlet-name>
+        <servlet-class>attendance.servlet.GrabDataServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GrabData</servlet-name>
+        <url-pattern>/GrabData</url-pattern>
+    </servlet-mapping>  
+    
 <!-- End Servlets -->
   
 <!-- Filter -->
