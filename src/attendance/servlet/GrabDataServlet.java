@@ -42,9 +42,22 @@ public class GrabDataServlet extends HttpServlet{
 			ObjectifyService.register(Attendance.class);
 			ObjectifyService.register(Course.class);
 			
-//			String unique = req.getParameter("classParam") + req.getParameter("email");
-			String unique = req.getParameter("classParam") + "a.balette@utexas.edu";
-//			resp.getWriter().println(unique);
+			String unique = null;
+			
+			if(req.getParameter("classParam") == null){
+				Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
+						.filter("email", req.getParameter("email"));
+
+				for(Student s : queryStudent){
+					String course = s.getCourses().get(0);
+					unique = course + req.getParameter("email");
+				}
+			}
+			
+			else{
+				unique = req.getParameter("classParam") + req.getParameter("email");
+			}
+
 			Query<Attendance> queryAttendance = ObjectifyService.ofy().load().type(Attendance.class)
 										.filter("attendanceKey", unique);
 			
@@ -55,20 +68,9 @@ public class GrabDataServlet extends HttpServlet{
 				// Print to response stream
 				ServletOutputStream rout = resp.getOutputStream();
 				rout.println(json.toString());
-				
-				// Convert hashmap
-//				JSONObject json = new JSONObject(a.getMap());
-				// Print to response stream
-//				String url="/DashboardProfessor.jsp"; //relative url for display jsp page
-//			    ServletContext sc = getServletContext();
-//			    RequestDispatcher rd = sc.getRequestDispatcher(url);
-//
-//			    req.setAttribute("json", json );
-//			    rd.forward(req, resp);
 
 			}
-		
-//			resp.getWriter().println("Returning");
+
 			
 		}
 

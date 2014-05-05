@@ -94,13 +94,30 @@
 		
 		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script>
+		var returnData = [];
+		
 		$(document).ready(function() {
-			var returnData = [];
+
 			var url=document.URL;
 			var email = "<%= Professor.normalize(user.getEmail()) %>";
 // 				alert(email);
  			var classParam=parseURLParams(url);
  			if(classParam == null){
+ 			    
+ 				$.get( "/GrabData", 
+ 			   			{classParam: classParam, email: email}, function (data) {
+ 			   		// Do something with data
+ 			   		for (var key in data) {
+ 			   			if (data.hasOwnProperty(key)) {
+ 			   				returnData.push(key + ":" + data[key]);
+//  			   				alert(returnData);
+ 			   				$(".result").append(key + ": " + data[key] + "<br/>");
+//  			   				alert($(".result").html());
+//  			   				alert($(".result").val());
+ 			   			}
+ 			   		}
+ 			   		createCalendar();
+ 			   	}, "json"); 				
  			}
 //	 				alert("Nothing to report.");
  			else{
@@ -110,12 +127,13 @@
  			   		for (var key in data) {
  			   			if (data.hasOwnProperty(key)) {
  			   				returnData.push(key + ":" + data[key]);
- 			   				alert(returnData);
+//  			   				alert(returnData);
  			   				$(".result").append(key + ": " + data[key] + "<br/>");
 //  			   				alert($(".result").html());
 //  			   				alert($(".result").val());
  			   			}
  			   		}
+ 			   		createCalendar();
  			   	}, "json");
  			}
 		} );
@@ -449,28 +467,34 @@
 	    var today = year + '-' + month + '-' + day
 
 	    
-	    	$(document).ready(function () {
-	         $(".responsive-calendar").responsiveCalendar({
-	        	 time: calendarStart,
+	    function createCalendar() {
+// 	    	$(document).ready(function () {
+	    		
+	    		var calendarInit={time: calendarStart, events: { today : {"today": 1}} };
+	    		 for (var line in returnData){
+   					 var parts = returnData[line].split(":");
+   					 calendarInit.events[parts[0]] = {"absentPresent": parts[1]};
+   		 		}
+	    		
+	         $(".responsive-calendar").responsiveCalendar(calendarInit);
+// 	        	 time: calendarStart,
 
-	        	 events: {
-	    		 today : {"today": 1},
+// 	        	 events: {
+// 	    		 today : {"today": 1},
 	    		 
-// 	    		 for (var line in returnData){
-// 	    			 var parts = line.split(":");
-// 	    		 }
-// // 	         	 "2014-03-30": {"absentPresent": 1},
-// // 	             "2014-03-26": {"absentPresent": 0}, 
-// // 	             "2014-03-03":{"number": 1, "absentPresent": 1, "url": "http://w3widgets.com"}, 
-// // 	             "2014-03-12": {"absentPresent": 0},
-// // 	             "2014-04-01": {"absentPresent": 1},
-// // 	             "2014-04-03": {"absentPresent": 0},
-// // 	             "2014-04-08": {"absentPresent": 1},
-// // 	             "2014-04-30": {"absentPresent": 0}
 
-	           }
-	         });
-	       });
+// 	         	 "2014-03-30": {"absentPresent": 1},
+// 	             "2014-03-26": {"absentPresent": 0}, 
+// 	             "2014-03-03":{"number": 1, "absentPresent": 1, "url": "http://w3widgets.com"}, 
+// 	             "2014-03-12": {"absentPresent": 0},
+// 	             "2014-04-01": {"absentPresent": 1},
+// 	             "2014-04-03": {"absentPresent": 0},
+// 	             "2014-04-08": {"absentPresent": 1},
+// 	             "2014-04-30": {"absentPresent": 0}
+
+	           
+// 	         );
+	       }
 	     </script>
 
 					<script>
