@@ -1,3 +1,16 @@
+<!-- 	This program is free software: you can redistribute it and/or modify -->
+<!--     it under the terms of the GNU General Public License as published by -->
+<!--     the Free Software Foundation, either version 3 of the License, or -->
+<!--     (at your option) any later version. -->
+
+<!--     This program is distributed in the hope that it will be useful, -->
+<!--     but WITHOUT ANY WARRANTY; without even the implied warranty of -->
+<!--     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the -->
+<!--     GNU General Public License for more details. -->
+
+<!--     You should have received a copy of the GNU General Public License -->
+<!--     along with this program.  If not, see <http://www.gnu.org/licenses/>. -->
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@ page import="java.util.List" %>
@@ -79,32 +92,36 @@
 		<!-- Page-Level Plugin CSS - Buttons -->
 		<link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
 		
-				<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script>
-		window.onload=function(){
+		$(document).ready(function() {
+			var returnData = [];
 			var url=document.URL;
-			var email=document.userEmail;
-//				alert(url);
+			var email = "<%= Professor.normalize(user.getEmail()) %>";
+// 				alert(email);
  			var classParam=parseURLParams(url);
  			if(classParam == null){
-//	 				alert("Nothing to report.");
  			}
+//	 				alert("Nothing to report.");
  			else{
- 				var test = 4;
- 				alert(classParam);
- 			    $.get( url:"/GrabData", 
+ 			    $.get( "/GrabData", 
  			   			{classParam: classParam, email: email}, function (data) {
  			   		// Do something with data
  			   		for (var key in data) {
  			   			if (data.hasOwnProperty(key)) {
- 			   				$(“.result”).append(key + “: “ + data[key] + “<br/>”);
+ 			   				returnData.push(key + ":" + data[key]);
+ 			   				alert(returnData);
+ 			   				$(".result").append(key + ": " + data[key] + "<br/>");
+//  			   				alert($(".result").html());
+//  			   				alert($(".result").val());
  			   			}
  			   		}
- 			   	}, “json”);
+ 			   	}, "json");
  			}
-		}
-
+		} );
+		</script>
 		
+		<script type="text/javascript">
 			function parseURLParams(url) {
 			    var queryStart = url.indexOf("?") + 1,
 			        queryEnd   = url.length + 1,
@@ -410,114 +427,51 @@
 		    <div class="day header">Sat</div>
 		    <div class="day header">Sun</div>
 		  </div>
-							  <div class="days" data-group="days">
-							    the place where days will be generated
-							  </div>
-							</div>
-					<!-- 	Responsive calendar - END -->
+			  <div class="days" data-group="days">
+			    the place where days will be generated
+			  </div>
+			</div>
+	<!-- 	Responsive calendar - END -->
 
-		<%
-		Query<Student> queryStudent2 = ObjectifyService.ofy().load().type(Student.class)
-										.filter("email", Student.normalize(user.getEmail() )); 
+	    <script src="../js/jquery.js"></script>
+	    <script src="../js/bootstrap.min.js"></script>
+	    <script src="../js/responsive-calendar.js"></script>
+	    <script type="text/javascript">
 
-		for(Student student : queryStudent2 ) {	
-		
-			if(student.getLatitude() != 0.0 
-					&& student.getLatitude() != 0.0){	
-				
-			%>	
-			
-			
-					    <script src="../js/jquery.js"></script>
-					    <script src="../js/bootstrap.min.js"></script>
-					    <script src="../js/responsive-calendar.js"></script>
-					    <script type="text/javascript">
+	    // Get me the current date
+	    var currentTime = new Date()
+	    var day = currentTime.getDate()
+	    if(day < 10) { day = '0'+ day } 
+	    var month = currentTime.getMonth() + 1
+	    if(month < 10) {month = '0'+ month} 
+	    var year = currentTime.getFullYear()
+	    var calendarStart = year + '-' + month
+	    var today = year + '-' + month + '-' + day
 
-					    // Get me the current date
-					    var currentTime = new Date()
-					    var day = currentTime.getDate()
-					    if(day < 10) { day = '0'+ day } 
-					    var month = currentTime.getMonth() + 1
-					    if(month < 10) {month = '0'+ month} 
-					    var year = currentTime.getFullYear()
-					    var calendarStart = year + '-' + month
-					    var today = year + '-' + month + '-' + day
+	    
+	    	$(document).ready(function () {
+	         $(".responsive-calendar").responsiveCalendar({
+	        	 time: calendarStart,
 
-					    
-					    	$(document).ready(function () {
-					         $(".responsive-calendar").responsiveCalendar({
-					        	 time: calendarStart,
+	        	 events: {
+	    		 today : {"today": 1},
+	    		 
+// 	    		 for (var line in returnData){
+// 	    			 var parts = line.split(":");
+// 	    		 }
+// // 	         	 "2014-03-30": {"absentPresent": 1},
+// // 	             "2014-03-26": {"absentPresent": 0}, 
+// // 	             "2014-03-03":{"number": 1, "absentPresent": 1, "url": "http://w3widgets.com"}, 
+// // 	             "2014-03-12": {"absentPresent": 0},
+// // 	             "2014-04-01": {"absentPresent": 1},
+// // 	             "2014-04-03": {"absentPresent": 0},
+// // 	             "2014-04-08": {"absentPresent": 1},
+// // 	             "2014-04-30": {"absentPresent": 0}
 
-					        	 events: {
-					    		 today : {"today": 1},
-					         	 "2014-03-30": {"absentPresent": 1},
-					             "2014-03-26": {"absentPresent": 0}, 
-					             "2014-03-03":{"number": 1, "absentPresent": 1, "url": "http://w3widgets.com"}, 
-					             "2014-03-12": {"absentPresent": 0},
-					             "2014-04-01": {"absentPresent": 1},
-					             "2014-04-03": {"absentPresent": 0},
-					             "2014-04-08": {"absentPresent": 1},
-					             "2014-04-30": {"absentPresent": 0}
-
-					           }
-					         });
-					       });
-					     </script>
-				<%	     
-			} else {
-				%>
-						
-			
-					    <script src="../js/jquery.js"></script>
-					    <script src="../js/bootstrap.min.js"></script>
-					    <script src="../js/responsive-calendar.js"></script>
-					    <script type="text/javascript">
-
-					    // Get me the current date
-					    var currentTime = new Date()
-					    var day = currentTime.getDate()
-					    if(day < 10) { day = '0'+ day } 
-					    var month = currentTime.getMonth() + 1
-					    if(month < 10) {month = '0'+ month} 
-					    var year = currentTime.getFullYear()
-					    var calendarStart = year + '-' + month
-					    var today = year + '-' + month + '-' + day
-
-					    
-					    	$(document).ready(function () {
-					         $(".responsive-calendar").responsiveCalendar({
-					        	 time: calendarStart,
-
-					        	 events: {
-					    		 today : {"today": 1},
-					         	 "2014-03-30": {"absentPresent": 1},
-					             "2014-03-26": {"absentPresent": 0}, 
-					             "2014-03-03":{"number": 1, "absentPresent": 1, "url": "http://w3widgets.com"}, 
-					             "2014-03-12": {"absentPresent": 0},
-					             "2014-04-01": {"absentPresent": 1},
-					             "2014-04-03": {"absentPresent": 0},
-					             "2014-04-08": {"absentPresent": 1},
-					             "2014-04-30": {"absentPresent": 0}
-
-					           }
-					         });
-					       });
-					     </script>	
-				<%
-				
-			}
-		}
-				%>
-					</section>	
-
-
-
-
-
-
-
-
-
+	           }
+	         });
+	       });
+	     </script>
 
 					<script>
 					function validateForm()

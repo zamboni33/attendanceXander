@@ -1,8 +1,19 @@
+//	This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package attendance.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -33,7 +44,7 @@ public class GrabDataServlet extends HttpServlet{
 			
 //			String unique = req.getParameter("classParam") + req.getParameter("email");
 			String unique = req.getParameter("classParam") + "a.balette@utexas.edu";
-			resp.getWriter().println(unique);
+//			resp.getWriter().println(unique);
 			Query<Attendance> queryAttendance = ObjectifyService.ofy().load().type(Attendance.class)
 										.filter("attendanceKey", unique);
 			
@@ -42,19 +53,22 @@ public class GrabDataServlet extends HttpServlet{
 				// Convert hashmap
 				JSONObject json = new JSONObject(a.getMap());
 				// Print to response stream
-//				ServletOutputStream rout = resp.getOutputStream();
-//				PrintWriter out = resp.getWriter();
-//				out.println(json.toString());
-//				resp.getWriter().println(json.toString());
-//				rout.println(json.toString());
-				resp.setContentType("text/html");
-				req.setAttribute("json",json.toString());
-			    req.getRequestDispatcher("/DashboardProfessor.jsp").forward(req, resp);
+				ServletOutputStream rout = resp.getOutputStream();
+				rout.println(json.toString());
+				
+				// Convert hashmap
+//				JSONObject json = new JSONObject(a.getMap());
+				// Print to response stream
+//				String url="/DashboardProfessor.jsp"; //relative url for display jsp page
+//			    ServletContext sc = getServletContext();
+//			    RequestDispatcher rd = sc.getRequestDispatcher(url);
+//
+//			    req.setAttribute("json", json );
+//			    rd.forward(req, resp);
+
 			}
-			
-			resp.getWriter().println(req.getParameter("classParam") + '\n');
-			resp.getWriter().println(req.getParameter("email") + '\n');
-			resp.getWriter().println("Test Drop" + '\n');
+		
+//			resp.getWriter().println("Returning");
 			
 		}
 

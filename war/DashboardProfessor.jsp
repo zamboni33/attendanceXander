@@ -1,3 +1,16 @@
+<!-- 	This program is free software: you can redistribute it and/or modify -->
+<!--     it under the terms of the GNU General Public License as published by -->
+<!--     the Free Software Foundation, either version 3 of the License, or -->
+<!--     (at your option) any later version. -->
+
+<!--     This program is distributed in the hope that it will be useful, -->
+<!--     but WITHOUT ANY WARRANTY; without even the implied warranty of -->
+<!--     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the -->
+<!--     GNU General Public License for more details. -->
+
+<!--     You should have received a copy of the GNU General Public License -->
+<!--     along with this program.  If not, see <http://www.gnu.org/licenses/>. -->
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.google.appengine.api.users.User" %>
@@ -61,6 +74,7 @@
 		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script>
 		$(document).ready(function() {
+			var returnData = [];
 			var url=document.URL;
 			var email = "<%= Professor.normalize(user.getEmail()) %>";
 // 				alert(email);
@@ -69,15 +83,17 @@
 //	 				alert("Nothing to report.");
  			}
  			else{
-//  				alert(classParam);
  			    $.get( "/GrabData", 
  			   			{classParam: classParam, email: email}, function (data) {
  			   		// Do something with data
- 			   		alert(data);
  			   		for (var key in data) {
-//  			   			if (data.hasOwnProperty(key)) {
-//  			   				$(“.result”).append(key + “: “ + data[key] + “<br/>”);
-//  			   			}
+ 			   			if (data.hasOwnProperty(key)) {
+ 			   				returnData.push(key + ": " + data[key]);
+ 			   				alert(returnData);
+ 			   				$(".result").append(key + ": " + data[key] + "<br/>");
+//  			   				alert($(".result").html());
+//  			   				alert($(".result").val());
+ 			   			}
  			   		}
  			   	}, "json");
  			}
@@ -284,6 +300,8 @@
 		  		<blockquote>Hello, ${fn:escapeXml(prof_first)} ${fn:escapeXml(prof_last)}!</blockquote>
 		    	<div id="chart_div" style="width: 900px; height: 500px;"></div>
 		    	<%} %>
+		    	
+
             <!-- /.row -->
         </div>
         <!-- /#page-wrapper -->
