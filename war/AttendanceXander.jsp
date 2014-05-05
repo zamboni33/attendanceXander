@@ -19,11 +19,11 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<html>
 
+<head>
 
-
-
-<html><head></head><body style=""><meta charset="utf-8">
+		<meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
             
             <title>UT Attendance</title>
@@ -43,13 +43,14 @@
     <!-- Page-Level Plugin CSS - Buttons -->
     <link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
                                 
+</head>
 
-
+<body style="">
 
     
     <div id="wrapper">
         
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default navbar-fixed-top" data-role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -115,7 +116,7 @@
             </div>
             <!-- /.row -->
             
-           <a href="SignIn.jsp" class="btn btn-primary btn-lg active" role="button">Sign in</a>
+           <a href="SignIn.jsp" class="btn btn-primary btn-lg active" data-role="button">Sign in</a>
 
             
             <!-- /.row -->

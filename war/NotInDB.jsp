@@ -33,10 +33,7 @@
 ObjectifyService.register(Course.class);
 %>
 
-</head>
-
-
-<body style=""><meta charset="utf-8">
+<meta charset="utf-8">
 
 <%		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser(); %>
@@ -60,12 +57,15 @@ ObjectifyService.register(Course.class);
     <link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
                                 
 
+</head>
 
+
+<body style="">
 
     
     <div id="wrapper">
         
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default navbar-fixed-top" data-role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -132,7 +132,7 @@ ObjectifyService.register(Course.class);
 					<div>
 					<% pageContext.setAttribute("user_email",
 							(user!=null?user.getEmail():"")); %>
-						<input name="email" rows="1" cols="120" value="${fn:escapeXml(user_email)}" readonly></input>
+						<input name="email" value="${fn:escapeXml(user_email)}" readonly></input>
 						<br>
 						<select class="form-control" 
 				        		id="courseDropDown" 
@@ -171,9 +171,9 @@ ObjectifyService.register(Course.class);
 					<h3>If you already have an account, please report your problem in the form below: </h3><br>
 					<h4>Email:</h4>
 					<div>
-						<input name="email" rows="1" cols="120" value="${fn:escapeXml(user_email)}"></input>
+						<input name="email" value="${fn:escapeXml(user_email)}"></input>
 					</div>
-					<h4>Describe the problem:<h4>
+					<h4>Describe the problem:</h4>
 					<div>
 						<textarea name="description" rows="15" cols="100"></textarea>
 					</div>

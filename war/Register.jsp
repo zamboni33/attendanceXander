@@ -43,11 +43,8 @@
 	<script
     	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">
 	</script>
-    
-    
-    
-    
-			<script type="text/javascript">
+
+	<script type="text/javascript">
 			var map;
 			var markers = [];
 			var austin = new google.maps.LatLng(30.286142,-97.739343);
@@ -96,10 +93,10 @@
 // 			  alert("Map Created!");
 				google.maps.event.addDomListener(window, 'load', initialize);
 				google.maps.event.addDomListener(window, "resize", function() {
-																	 var center = map.getCenter();
-																	 google.maps.event.trigger(map, "resize");
-																	 $('.contextmenu').remove(); 
-																	});
+													 var center = map.getCenter();
+													 google.maps.event.trigger(map, "resize");
+													 $('.contextmenu').remove(); 
+													});
 			}
 
 			
@@ -112,7 +109,7 @@
 
 			// Removes the markers from the map, but keeps them in the array.
 			function clearMarkers() {
-// 			  alert("Deleting Markers.");
+
 			  setAllMap(null);
 			}
 
@@ -127,10 +124,8 @@
 			  markers = [];
 			}
 			</script>    
-    
-
- </head>	
- <body style=""><meta charset="utf-8">
+			
+	<meta charset="utf-8">
          <meta name="viewport" content="width=device-width, initial-scale=1.0">
             
              <title>Welcome - attendance.utexas.edu</title>
@@ -149,10 +144,14 @@
                             
      <!-- Page-Level Plugin CSS - Buttons -->
      <link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
+    
+
+ </head>	
+
   <body>
       <div id="wrapper">
         
-          <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+          <nav class="navbar navbar-default navbar-fixed-top" data-role="navigation" style="margin-bottom: 0">
               <div class="navbar-header">
                   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                       <span class="sr-only">Toggle navigation</span>
@@ -166,11 +165,6 @@
             
               <ul class="nav navbar-top-links navbar-right">
                 
-                
-                
-                
-                
-                
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -182,28 +176,25 @@
   						    User user = userService.getCurrentUser();
 
  						    if (user != null) {
- 						%>
+ 								%>
  								<li><a href="<%= userService.createLogoutURL("/") %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
- 						<%
+ 								<%
  							} 
-				    
  						    else {
- 							%>
+ 								%>
  								<script type="text/javascript">
  								window.location.href="/";
  								</script>
- 						<%
+ 								<%
  						    }
  						%>
-                        
-                        
+
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
                 <!-- /.dropdown -->
             </ul>
             <!-- /.navbar-top-links -->
-            
             
             <!-- /.navbar-static-side -->
         </nav>
@@ -222,6 +213,7 @@
 		</script>
 
 		<%
+	// Decide whether we are registering a student or a professor
 		    if (user != null) {
 		      pageContext.setAttribute("userEmail", user.getEmail());
 		    }
@@ -231,6 +223,7 @@
 			Query<Professor> queryProfessor = ObjectifyService.ofy().load().type(Professor.class)
 												.filter("email", Professor.normalize(user.getEmail()) );
 
+			// Register Student
 			if(queryStudent.count() > 0){
 		%>
 				<form action="/Register" method="post" onsubmit="return validateFormStudent()" name="registerForm">
@@ -261,7 +254,7 @@
 						if (firstName==null || firstName=="" 
 								|| lastName==null || lastName==""	)
 					 	{
-						  	alert("There are required fields that are not filled in.");
+						  	alert("All fields are required. There are required fields that are not filled in.");
 						  	return false;
 					  	}
 					}
@@ -269,95 +262,116 @@
 			
 		<%	
 			}
+			
+			// Register Professor
+			
 			else {
 		%>	
 		
 		<div>
-				    Register a Class
+	    Register a Class
 
-				    <form action="/Register" method="post" onsubmit="return validateForm()" name="registerForm">
-						<div>
-							<p>Professor | Register</p>
+	    <form action="/Register" method="post" onsubmit="return validateForm()" name="registerForm">
+			<div>
+				<p>Professor | Register</p>
 
-							<p>First Name:
-									<input 	id="first"	
-											name="first">
-							</p>
+<!-- 				Only ask for this information if Professor not registered. -->	
+				<%
+				for(Professor p : queryProfessor){
+					
+					if(p.getRegistered() == false){
+				%>
+						<p>First Name:
+								<input 	id="first"	
+										name="first">
+						</p>
+		
+						<p>Last Name:
+								<input 	id="last"
+										name="last">
+						</p>
+				<%
+					}
+					else {
+				%>
+						<p>First Name:
+								<input 	id="first"	
+										name="first"
+										type="hidden"
+										value=<%p.getFirst(); %> >
+						</p>
+		
+						<p>Last Name:
+								<input 	id="last"
+										name="last"
+										type="hidden"
+										value=<%p.getLast(); %> >
+						</p>
+				<%
+					}
+				}
+				%>
 
-							<p>Last Name:
+				<p> Course name: 	</p>
 
-									<input 	id="last"
-											name="last">
-							</p>
+					<%
+					ObjectifyService.register(Course.class);
+					ObjectifyService.register(Professor.class);
+					ObjectifyService.register(Student.class);
 
-							<p>Course name:
+					List<Course> courses = ObjectifyService.ofy().load().type(Course.class).list();
+					List<Professor> professors = ObjectifyService.ofy().load().type(Professor.class).list();
 
-								<%
-								ObjectifyService.register(Course.class);
-								ObjectifyService.register(Professor.class);
-								ObjectifyService.register(Student.class);
+				    if (courses.isEmpty()) {
+					%>
+					        <p>Courses are empty. All University courses have been registered.</p>
+					<%
+					} 
+				    else {
+					%>
+				        <select class="form-control" 
+				        		id="courseDropDown" 
+				        		name="courseDropDown" 
+				        		style="width: 500px">
+						<%
+						    for(Course course : courses) {
+						        if(course.getProfessor() == null){
+						        	pageContext.setAttribute("course_name", 
+						            		course.getClassTitle());
+						        	pageContext.setAttribute("course_unique", 
+						            		course.getClassUnique());
+						%>
+						        	<option value="${fn:escapeXml(course_unique)}"> 
+						        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
+						            		</option>
+						 <%
+						        }
+							}
+					}				
+									 %>	
+					    	</select>	
 
-								List<Course> courses = ObjectifyService.ofy().load().type(Course.class).list();
-								List<Professor> professors = ObjectifyService.ofy().load().type(Professor.class).list();
+					<p>Course Location:
 
-							    if (courses.isEmpty()) {
-														%>
-								        <p>Courses are empty. Shouldn't ever happen. WTF!</p>
-								<%
-								} 
-							    else {
-								%>
-							        <select class="form-control" 
-							        		id="courseDropDown" 
-							        		name="courseDropDown" 
-							        		style="width: 500px">
-									<%
-									    for(Course course : courses) {
-									        if(course.getProfessor() == null){
-									        	pageContext.setAttribute("course_name", 
-									            		course.getClassTitle());
-									        	pageContext.setAttribute("course_unique", 
-									            		course.getClassUnique());
-									%>
-									        	<option value="${fn:escapeXml(course_unique)}"> 
-									        					${fn:escapeXml(course_name)}: ${fn:escapeXml(course_unique)}
-									            		</option>
-									 <%
-									        }
-										}
-								}				
-												 %>	
-								    	</select>	
-								</p>
+						<input 	id="latitude"
+								name="latitude"
+								type="number"
+								readonly>
 
-								
+						<input 	id="longitude"
+								name="longitude"
+								type="number"
+								readonly>
+					</p>
+						<div 	id="map_canvas" 
+								style="height:300px; 
+								width:500px">
+								</div>
 
-
-								<p>Course Location:
-
-
-									<input 	id="latitude"
-											name="latitude"
-											type="number"
-											readonly>
-
-									<input 	id="longitude"
-											name="longitude"
-											type="number"
-											readonly>
-								</p>
-
-									<div 	id="map_canvas" 
-											style="height:300px; 
-											width:500px">
-											</div>
-
-
-
-								<input 	type="submit" 
-										name="registerClass" 
-										value="Submit">
-						</div>				    
+					<input 	type="submit" 
+							name="registerClass" 
+							value="Submit">
+			</div>				    
 
 				    </form>
 				    
@@ -374,7 +388,9 @@
 				    
 	</div>	    
 				    
-	<% } // End of Professor Reg%> 
+	<% } // End of Professor Reg
+	%> 
+					
 					<script>
 					function validateForm()
 					{
@@ -387,7 +403,7 @@
 								|| latitude==null || latitude==""
 								|| longitude==null || longitude==""	)
 					 	{
-						  	alert("There are required fields that are not filled in.");
+						  	alert("All fields are required. There are required fields that are not filled in.");
 						  	return false;
 					  	}
 					}
@@ -416,9 +432,6 @@
 
 </div>
 
-
-			
-			
 			<script>
 			var initialLocation;
 			var austin = new google.maps.LatLng(30.2500, -97.7500);

@@ -12,17 +12,23 @@
 <!--     along with this program.  If not, see <http://www.gnu.org/licenses/>. -->
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
+
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
+
+<%@ page import="java.util.List" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="java.util.ArrayList" %>
+
 <%@ page import="com.googlecode.objectify.ObjectifyService" %>
 <%@ page import="com.googlecode.objectify.cmd.Query" %>
+
 <%@ page import="attendance.entity.Professor" %>
 <%@ page import="attendance.entity.Course" %>
+
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 
 
 
@@ -30,6 +36,26 @@
 
 <html>
 	<head>
+	
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+            <title>Professor Dashboard - attendance.utexas.edu</title>
+            
+            <!-- Core CSS - Include with every page -->
+            <link href="css/bootstrap.min.css" rel="stylesheet">
+                <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+                    
+                    <!-- Page-Level Plugin CSS - Dashboard -->
+                    <link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+                        <link href="css/plugins/timeline/timeline.css" rel="stylesheet">
+                            
+                            <!-- SB Admin CSS - Include with every page -->
+                            <link href="css/sb-admin.css" rel="stylesheet">
+                            
+                            
+    <!-- Page-Level Plugin CSS - Buttons -->
+    <link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
 	    
 		    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		    <script type="text/javascript">
@@ -134,34 +160,14 @@
 		
 		
 		
-	</head>
-	<body style=""><meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            
-            <title>Professor Dashboard - attendance.utexas.edu</title>
-            
-            <!-- Core CSS - Include with every page -->
-            <link href="css/bootstrap.min.css" rel="stylesheet">
-                <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-                    
-                    <!-- Page-Level Plugin CSS - Dashboard -->
-                    <link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-                        <link href="css/plugins/timeline/timeline.css" rel="stylesheet">
-                            
-                            <!-- SB Admin CSS - Include with every page -->
-                            <link href="css/sb-admin.css" rel="stylesheet">
-                            
-                            
-    <!-- Page-Level Plugin CSS - Buttons -->
-    <link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
-                                
+	</head>                      
 
 
-
+	<body style="">
     
     <div id="wrapper">
         
-        <div class="navbar-default navbar-static-side" role="navigation">
+        <div class="navbar-default navbar-static-side" data-role="navigation">
 		<div class="sidebar-collapse">
 			<ul class="nav" id="side-menu">
 				<li class="sidebar-search">
@@ -214,7 +220,7 @@
 	</div>
 	<!-- /.navbar-static-side -->    
         
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default navbar-fixed-top" data-role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -244,12 +250,6 @@
 								<li><a href="<%= userService.createLogoutURL("/") %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
 						<%
 							} 
-				    
-						    else {
-							%>
-								<li><a href="<%= userService.createLoginURL("/SignIn") %>"><i class="fa fa-sign-in fa-fw"></i> Sign In</a></li>
-						<%
-						    }
 						%>
                         
                         
@@ -275,20 +275,11 @@
 		  	<% 
 		  	
 		  	Professor actualProfessor = null;
-		  	if (professors==null)
-			{
-				%>
-				
-				<script type="text/javascript">
-					window.location.href= 'SignIn';
-				</script>
-					
-				<%
-			} else {
+
 		  	for (Professor p : professors)
-		  	{
-		  			actualProfessor = p;
-		  	}
+			  	{
+			  			actualProfessor = p;
+			  	}
 			
 		  	pageContext.setAttribute("prof_first",
 					actualProfessor.getFirst());
@@ -299,7 +290,6 @@
 		  	%>
 		  		<blockquote>Hello, ${fn:escapeXml(prof_first)} ${fn:escapeXml(prof_last)}!</blockquote>
 		    	<div id="chart_div" style="width: 900px; height: 500px;"></div>
-		    	<%} %>
 		    	
 
             <!-- /.row -->

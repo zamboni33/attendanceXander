@@ -30,13 +30,30 @@
 <%@ page import="attendance.entity.Student" %>
 <%@ page import="attendance.entity.Course" %>
 
-
-
-
-
-
 <html>
 	<head>  
+	
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+            
+		<title>Student Dashboard</title>
+            
+		<!-- Core CSS - Include with every page -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+                    
+		<!-- Page-Level Plugin CSS - Dashboard -->
+		<link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+		<link href="css/plugins/timeline/timeline.css" rel="stylesheet">
+                            
+		<!-- SB Admin CSS - Include with every page -->
+		<link href="css/sb-admin.css" rel="stylesheet">
+                            
+                            
+		<!-- Page-Level Plugin CSS - Buttons -->
+		<link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
+		
+		<link href="css/responsive-calendar.css" rel="stylesheet" media="screen">
  
 		<%
 	    	UserService userService = UserServiceFactory.getUserService();
@@ -72,25 +89,8 @@
 
 		<!--   Calendar Additions End   -->
 
-		<body style=""><meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-            
-		<title>Student Dashboard</title>
-            
-		<!-- Core CSS - Include with every page -->
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-                    
-		<!-- Page-Level Plugin CSS - Dashboard -->
-		<link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-		<link href="css/plugins/timeline/timeline.css" rel="stylesheet">
-                            
-		<!-- SB Admin CSS - Include with every page -->
-		<link href="css/sb-admin.css" rel="stylesheet">
-                            
-                            
-		<!-- Page-Level Plugin CSS - Buttons -->
-		<link href="css/plugins/social-buttons/social-buttons.css" rel="stylesheet">
+		<body style="">
+
 		
 		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script>
@@ -168,7 +168,7 @@
     
     <div id="wrapper">
         
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default navbar-fixed-top" data-role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -179,8 +179,9 @@
                 <a class="navbar-brand" href="AttendanceXander.jsp">attendance.utexas.edu</a>
             </div>
             <!-- /.navbar-header -->
+
             
-	<div class="navbar-default navbar-static-side" role="navigation">
+	<div class="navbar-default navbar-static-side" data-role="navigation">
 		<div class="sidebar-collapse">
 			<ul class="nav" id="side-menu">
 				<li class="sidebar-search">
@@ -250,10 +251,7 @@
  						%>
  								<li><a href="<%= userService.createLogoutURL("/") %>"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a></li>
  						<%	} 
- 						    else {	
- 						 %>
- 								<li><a href="<%= userService.createLoginURL("/SignIn") %>"><i class="fa fa-sign-in fa-fw"></i> Sign In</a></li>
- 						<%  }	%>
+						%>
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
@@ -277,15 +275,7 @@
 		</script>
 	  	<% 
 	  	Student actualStudent = null;
-	  	if (students==null)
-		{
-			%>
-			<script type="text/javascript">
-				window.location.href= 'SignIn';
-			</script>
-				
-			<%
-		} else {
+
 	  	for (Student s : students)
 	  	{
 	  			actualStudent = s;
@@ -296,9 +286,7 @@
 	  	%>
 	  		<blockquote>Hello, ${fn:escapeXml(stud_email)}!</blockquote>
 	    	
-	    	<%} %>
-	    	
-	    	
+    	
 
 	Student Dashboard
 
@@ -311,7 +299,7 @@
 
 	    <form action="/Locate" method="post" onsubmit="return validateForm()" name="locateForm">
 			<div>
-			<p>
+			
 			<% 		
 				Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
 					.filter("email", Student.normalize(user.getEmail() )); 
@@ -365,7 +353,7 @@
 												}
 											%>	
 									    	</select>				    	
-					</p>
+					
 								<%
 								if(student.getLatitude() != 0.0 
 										&& student.getLatitude() != 0.0){
@@ -416,7 +404,7 @@
 								name="longitude"
 								type="number"
 								readonly>
-					</p>
+					
 
 					<input 	type="submit" 
 							name="locateClass"
@@ -426,15 +414,13 @@
 	    </form>
 
 	<section>			    
-					<head>
-					<link href="css/responsive-calendar.css" rel="stylesheet" media="screen">
-					</head>
+					
 					<!-- 	Responsive calendar - START -->
 		<div class="responsive-calendar">
 		  <div class="controls">
-		      <a class="pull-left" data-go="prev"><div class="btn"> Previous </div></a>
+		      <a class="pull-left" data-go="prev"> Previous </a>
 		      <h4><span data-head-year></span> <span data-head-month></span></h4>
-		      <a class="pull-right" data-go="next"><div class="btn"> Next </div></a>
+		      <a class="pull-right" data-go="next"> Next </a>
 		  </div><hr/>
 		  <div class="day-headers">
 		    <div class="day header">Mon</div>
@@ -496,7 +482,7 @@
 // 	         );
 	       }
 	     </script>
-
+	</section>
 					<script>
 					function validateForm()
 					{
@@ -525,7 +511,6 @@
 					}
 					</script>
 
-			</div>	
 
 			<script type="text/javascript">
 			var map;
@@ -616,8 +601,8 @@
             <!-- /.row -->
         </div>
         <!-- /#page-wrapper -->
-        
-    </div>
+
+	</div>
     <!-- /#wrapper -->
     
     <!-- Core Scripts - Include with every page -->
