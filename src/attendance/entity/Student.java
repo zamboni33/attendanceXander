@@ -124,11 +124,14 @@ public class Student {
 	public void setAttendanceKey(String key) {
 		this.attendanceKey.add(key);
 	}
+	public void setAttendanceKeyList(ArrayList<String> key) {
+		this.attendanceKey = key;
+	}
 	public ArrayList<String> getCourses() {
 		return this.courses;
 	}
 	public void setCourses(ArrayList<String> courses) {
-		this.attendanceKey = courses;
+		this.courses = courses;
 	}
 	
 	

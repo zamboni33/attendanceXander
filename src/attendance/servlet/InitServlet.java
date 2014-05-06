@@ -13,33 +13,25 @@
 
 package attendance.servlet;
  
+import attendance.entity.Attendance;
 import attendance.entity.Course;
 import attendance.entity.Professor;
 import attendance.entity.Student;
 
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-import com.google.apphosting.api.DatastorePb.DatastoreService;
-import com.googlecode.objectify.*;
 import com.googlecode.objectify.cmd.Query;
+import com.googlecode.objectify.*;
 
 import static com.googlecode.objectify.ObjectifyService.ofy; 
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+// Servlet to initialize courses within the datastore.
  
-@SuppressWarnings("unused")
 public class InitServlet extends HttpServlet {
     /**
 	 * 
@@ -57,28 +49,6 @@ public class InitServlet extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		if (req.getParameter("initButton") != null) {
-			
-//			ArrayList<String> students = new ArrayList<String>();
-//			String steven = new String("steven@utexas.edu");
-//			students.add(steven);
-//			String jim = new String("jim@utexas.edu");
-//			students.add(jim);
-//			String robert = new String("robert@utexas.edu");
-//			students.add(robert);
-//			String sally = new String("sally@utexas.edu");
-//			students.add(sally);
-//			String rachael = new String("rachael@utexas.edu");
-//			students.add(rachael);
-//			String alexander = new String("a.balette@utexas.edu");
-//			students.add(alexander);
-//			String lucas = new String("lucascf@utexas.edu");
-//			students.add(lucas);
-//			String blake = new String("bjennings24@gmail.com");
-//			students.add(blake);
-//			String jewliano = new String("giulianoprado@gmail.com");
-//			students.add(jewliano);
-//			String colin = new String("colin.hickman@utexas.edu");
-//			students.add(colin);
 			
 			if(req.getParameter("email").equals("c.julien@mail.utexas.edu")){
 			
@@ -108,8 +78,50 @@ public class InitServlet extends HttpServlet {
 				ArrayList<String> times2 = new ArrayList<String>();
 				times2.add("15:00");
 				
+				ArrayList<String> courseUniqueList = new ArrayList<String>();
+				courseUniqueList.add("12345");
+				
 				Course newCourse = new Course ("CPE 2.238", "Software Development", "12345", 
 													days, times);
+				newCourse.addStudent("a.balette@utexas.edu");
+				newCourse.addStudent("acshulyak@utexas.edu");
+				newCourse.addStudent("adamsak778@gmail.com");
+				newCourse.addStudent("ads2666@me.com");
+				newCourse.addStudent("ali.brinegar@gmail.com");
+				newCourse.addStudent("astolz92@utexas.edu");
+				newCourse.addStudent("colin.hickman@utexas.edu");
+				newCourse.addStudent("juanncano@gmail.com");
+				newCourse.addStudent("k.gowru@gmail.com");
+				newCourse.addStudent("mphilipose@utexas.edu");
+				newCourse.addStudent("nadeem.zaki@utexas.edu");
+				newCourse.addStudent("tylerbusby@utexas.edu");
+				newCourse.addStudent("romitkudtarkar@gmail.com");
+				newCourse.addStudent("utravel461l@gmail.com");
+				
+				for(String s : newCourse.getStudents()){
+					Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
+							.filter("email", Student.normalize(s) );
+					for(Student thisStudent : queryStudent){
+						thisStudent.setCourses(courseUniqueList);
+						
+						ArrayList<String> temp2 = new ArrayList<String>();
+						temp2.add("12345" + thisStudent.getEmail());
+						
+						thisStudent.setAttendanceKeyList(temp2);
+						ofy().save().entities(thisStudent).now();
+					}
+//					if(s.equals("a.balette@utexas.edu")){
+//						String temp = "12345" + Student.normalize(s);
+//						Query<Attendance> queryAttendance = ObjectifyService.ofy().load().type(Attendance.class)
+//															.filter("attendanceKey", temp );
+//						for(Attendance a : queryAttendance){
+//							a.getAttendance().put(key, value)
+//							ofy().save().entities(a).now();
+//						}
+//					}
+					
+				}
+				
 				ofy().save().entities(newCourse).now();
 				Course newCourse2 = new Course ("CPE 2.240", "Basket Weaving", "67890", 
 													days, times2);

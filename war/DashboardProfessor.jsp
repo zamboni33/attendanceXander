@@ -62,19 +62,20 @@
 		      google.load("visualization", "1", {packages:["corechart"]});
 		      google.setOnLoadCallback(drawChart);
 		      function drawChart() {
-		        var data = google.visualization.arrayToDataTable([
-		          ['Class', 'Attendance'],
-		          ['01/03/2014',  34	],
-		          ['01/06/2014',  23	],
-		          ['01/08/2014',  40],
-		          ['01/15/2014',  31]
-		        ]);
-
+		    	  var data = new google.visualization.DataTable();
+		    	  data.addColumn('string', 'Date');
+		    	  data.addColumn('number', 'Attendant');
+		    	  for(i = 0; i < Dates.length; i++){
+		    		  if(Dates[i] != "0000-00-00"){
+		    		 	 data.addRow([Dates[i], StudentsPresent[i]]);
+		    	  	}
+		    	  }
+		    	  data.sort([{column: 0, asc:true}, {column: 1}]);	  
 		        var options = {
 		          title: 'Attendance'
 		        };
 
-		        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+		        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
 		        chart.draw(data, options);
 		      }
 		    </script>
@@ -84,29 +85,42 @@
 	    	Query<Professor> professors = null;
 	    	if (user==null)
 	    	{
-	    		%>
+	    %>
 			
 			<script type="text/javascript">
 				window.location.href= 'SignIn';
 			</script>
 				
-			<%
+		<%
 	    	} else {
-			professors = ObjectifyService.ofy().load().type(Professor.class)
+					professors = ObjectifyService.ofy().load().type(Professor.class)
 										.filter("email", Professor.normalize(user.getEmail()) );
 	    	}
 		%> 
 		
 		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script>
+		var Dates = [];
+		var StudentsPresent = [];
 		$(document).ready(function() {
-			var returnData = [];
 			var url=document.URL;
 			var email = "<%= Professor.normalize(user.getEmail()) %>";
 // 				alert(email);
  			var classParam=parseURLParams(url);
  			if(classParam == null){
 //	 				alert("Nothing to report.");
+ 			    $.get( "/GrabData", 
+ 			   			{classParam: classParam, email: email}, function (data) {
+ 			   		// Do something with data
+ 			   		for (var key in data) {
+ 			   			if (data.hasOwnProperty(key)) {
+ 			   				Dates.push(key);
+ 			   				StudentsPresent.push(data[key]);
+ 			   				$(".result").append(key + ": " + data[key] + "<br/>");
+ 			   			}
+ 			   		}
+ 			   		drawChart();
+ 			   	}, "json");
  			}
  			else{
  			    $.get( "/GrabData", 
@@ -114,13 +128,12 @@
  			   		// Do something with data
  			   		for (var key in data) {
  			   			if (data.hasOwnProperty(key)) {
- 			   				returnData.push(key + ": " + data[key]);
- 			   				alert(returnData);
+			   				Dates.push(key);
+ 			   				StudentsPresent.push(data[key]);
  			   				$(".result").append(key + ": " + data[key] + "<br/>");
-//  			   				alert($(".result").html());
-//  			   				alert($(".result").val());
  			   			}
  			   		}
+ 			   	drawChart();
  			   	}, "json");
  			}
 		} );
@@ -212,6 +225,9 @@
 					%>
 						<li><a href="DashboardProfessor.jsp?class=${fn:escapeXml(course_unique_menu)}">${fn:escapeXml(course_name_menu)}</a></li>
 					<% } %>
+					
+	  				<li><a href="/Register.jsp">Register Another Course</a></li>
+					
 					</ul> <!-- /.nav-second-level --></li>
 			</ul>
 			<!-- /#side-menu -->
@@ -289,6 +305,7 @@
 						actualProfessor.getEmail());
 		  	%>
 		  		<blockquote>Hello, ${fn:escapeXml(prof_first)} ${fn:escapeXml(prof_last)}!</blockquote>
+		  		
 		    	<div id="chart_div" style="width: 900px; height: 500px;"></div>
 		    	
 

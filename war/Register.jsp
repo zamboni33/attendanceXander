@@ -73,7 +73,7 @@
 			  };
 			  map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
 // 			  google.maps.event.addListener(map, "rightclick",function(event){showContextMenu(event.latLng);});
-			google.maps.event.addListener(map, "rightclick", function(event) {
+			google.maps.event.addListener(map, "click", function(event) {
 			    deleteMarkers();
 				
 				var lat = event.latLng.lat();
@@ -269,7 +269,7 @@
 		%>	
 		
 		<div>
-	    Register a Class
+	    Register A Class
 
 	    <form action="/Register" method="post" onsubmit="return validateForm()" name="registerForm">
 			<div>
@@ -293,24 +293,27 @@
 				<%
 					}
 					else {
+						
+			        	pageContext.setAttribute("firstName", 
+			            		p.getFirst());
+			        	pageContext.setAttribute("lastName", 
+			            		p.getLast());
 				%>
-						<p>First Name:
 								<input 	id="first"	
 										name="first"
 										type="hidden"
-										value=<%p.getFirst(); %> >
-						</p>
+										value="${fn:escapeXml(firstName)}" >
 		
-						<p>Last Name:
 								<input 	id="last"
 										name="last"
 										type="hidden"
-										value=<%p.getLast(); %> >
-						</p>
+										value="${fn:escapeXml(lastName)}" >
 				<%
 					}
 				}
 				%>
+				
+				<br>
 
 				<p> Course name: 	</p>
 
@@ -350,8 +353,10 @@
 					}				
 									 %>	
 					    	</select>	
+					    	
+					<br>
 
-					<p>Course Location:
+					<p>Course Location:		</p>
 
 						<input 	id="latitude"
 								name="latitude"
@@ -362,7 +367,24 @@
 								name="longitude"
 								type="number"
 								readonly>
-					</p>
+								
+						<br> <br>
+						<p> Left click the map to set your course location, or use your current location. </p>
+						<br>
+								
+						<input 	id="mapButton" 
+								name="mapButton" 
+								type="button" 
+								onclick="displayMap()" 
+								value = "Show Map">
+	
+						<input 	id="locationButton" 
+								type="button" 
+								onclick="initializePosition()" 
+								value="Use Current Location">
+								
+						<br>
+
 						<div 	id="map_canvas" 
 								style="height:300px; 
 								width:500px">
@@ -374,17 +396,6 @@
 			</div>				    
 
 				    </form>
-				    
-			<input 		id="mapButton" 
-						name="mapButton" 
-						type="button" 
-						onclick="displayMap()" 
-						value = "Show Map">
-
-			<input 		id="locationButton" 
-						type="button" 
-						onclick="initializePosition()" 
-						value="Use Current Location">
 				    
 	</div>	    
 				    

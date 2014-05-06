@@ -14,11 +14,12 @@
 package attendance.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 import javax.jdo.annotations.Persistent;
+
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
@@ -70,10 +71,11 @@ public class Attendance {
 	
 	// Access Map Data
 	
-	public List<String> getKeys () {
+	public ArrayList<String> getKeys () {
 		System.out.println("Retrieving Keys");
 		Set<String> keySet = this.attendance.keySet();
-		List<String> keys = new ArrayList<String>(keySet);
+		ArrayList<String> keys = new ArrayList<String>(keySet);
+		Collections.sort(keys);
 		return (keys);
 	}
 	public HashMap<String, Boolean> getMap () {

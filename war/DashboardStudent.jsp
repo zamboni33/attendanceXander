@@ -459,7 +459,12 @@
 	    		var calendarInit={time: calendarStart, events: { today : {"today": 1}} };
 	    		 for (var line in returnData){
    					 var parts = returnData[line].split(":");
+   					 if(parts[1] == "false"){
+   						calendarInit.events[parts[0]] = {"absentPresent": 0};
+   					 }
+   					 else{
    					 calendarInit.events[parts[0]] = {"absentPresent": parts[1]};
+   					 }
    		 		}
 	    		
 	         $(".responsive-calendar").responsiveCalendar(calendarInit);

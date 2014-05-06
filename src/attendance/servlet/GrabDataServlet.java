@@ -14,6 +14,9 @@
 package attendance.servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -42,33 +45,90 @@ public class GrabDataServlet extends HttpServlet{
 			ObjectifyService.register(Attendance.class);
 			ObjectifyService.register(Course.class);
 			
-			String unique = null;
+			Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
+					.filter("email", Student.normalize(req.getParameter("email")) );
+			Query<Professor> queryProfessor = ObjectifyService.ofy().load().type(Professor.class)
+								.filter("email", Professor.normalize(req.getParameter("email")) );
 			
-			if(req.getParameter("classParam") == null){
-				Query<Student> queryStudent = ObjectifyService.ofy().load().type(Student.class)
-						.filter("email", req.getParameter("email"));
-
-				for(Student s : queryStudent){
-					String course = s.getCourses().get(0);
-					unique = course + req.getParameter("email");
+			// Grab Student Data
+			if(queryStudent.count() > 0){
+				String unique = null;
+				if(req.getParameter("classParam") == null){
+	
+					for(Student s : queryStudent){
+						String course = s.getCourses().get(0);
+						unique = course + req.getParameter("email");
+					}
+				}
+				else{
+					unique = req.getParameter("classParam") + req.getParameter("email");
+				}
+				Query<Attendance> queryAttendance = ObjectifyService.ofy().load().type(Attendance.class)
+											.filter("attendanceKey", unique);
+				
+				for(Attendance a : queryAttendance){
+				
+					// Convert hashmap
+					JSONObject json = new JSONObject(a.getMap());
+					// Print to response stream
+					ServletOutputStream rout = resp.getOutputStream();
+					rout.println(json.toString());
+	
 				}
 			}
-			
 			else{
-				unique = req.getParameter("classParam") + req.getParameter("email");
-			}
-
-			Query<Attendance> queryAttendance = ObjectifyService.ofy().load().type(Attendance.class)
-										.filter("attendanceKey", unique);
-			
-			for(Attendance a : queryAttendance){
-			
-				// Convert hashmap
-				JSONObject json = new JSONObject(a.getMap());
-				// Print to response stream
-				ServletOutputStream rout = resp.getOutputStream();
-				rout.println(json.toString());
-
+				// Grab Professor Data
+				String uniqueCourse = null;
+				if(req.getParameter("classParam") == null){
+	
+					for(Professor p : queryProfessor){
+						String course = p.getCourses().get(0);
+						uniqueCourse = course;
+					}
+				}
+				else{
+					uniqueCourse = req.getParameter("classParam");
+				}
+				Query<Course> queryCourse = ObjectifyService.ofy().load().type(Course.class)
+											.filter("classUnique", uniqueCourse);
+				
+				// We have the course unique
+					// Get list of students and count those present
+				
+				for(Course c : queryCourse){
+					HashMap<String, Integer> legend = new HashMap<String, Integer>();
+					for(String s : c.getStudents()){
+						
+						String unique = uniqueCourse + s;
+						Query<Attendance> queryAttendance = ObjectifyService.ofy().load().type(Attendance.class)
+															.filter("attendanceKey", unique);
+						
+						ArrayList<String> thisAttendance = null;
+						for(Attendance a : queryAttendance){
+							thisAttendance = a.getKeys();
+							
+							for(String date : thisAttendance){
+								if(legend.get(date) == null){
+									legend.put(date, 0);
+								}
+								
+								if(a.getAttendance().get(date) == true){
+									legend.put(date, legend.get(date) + 1);
+								}
+							}
+						}
+						
+					}
+					// Create JSON from hashmap
+					// Convert hashmap
+					JSONObject json = new JSONObject(legend);
+					// Print to response stream
+					ServletOutputStream rout = resp.getOutputStream();
+					rout.println(json.toString());
+	
+				}
+				
+				
 			}
 
 			
